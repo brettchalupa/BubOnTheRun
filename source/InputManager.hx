@@ -108,6 +108,12 @@ class InputManager
 			case RIGHT:
 				return FlxG.keys.justPressed.RIGHT || justPressedGamepad(action);
 
+			case UP:
+				return FlxG.keys.justPressed.UP || justPressedGamepad(action);
+
+			case DOWN:
+				return FlxG.keys.justPressed.DOWN || justPressedGamepad(action);
+
 			case CANCEL:
 				return FlxG.keys.justPressed.BACKSPACE || FlxG.keys.justPressed.X || justReleasedGamepad(action);
 
@@ -130,6 +136,10 @@ class InputManager
 				return gamepad.justPressed.DPAD_LEFT || gamepad.justPressed.LEFT_STICK_DIGITAL_LEFT;
 			case RIGHT:
 				return gamepad.justPressed.DPAD_RIGHT || gamepad.justPressed.LEFT_STICK_DIGITAL_RIGHT;
+			case UP:
+				return gamepad.justPressed.DPAD_UP || gamepad.justPressed.LEFT_STICK_DIGITAL_UP;
+			case DOWN:
+				return gamepad.justPressed.DPAD_DOWN || gamepad.justPressed.LEFT_STICK_DIGITAL_DOWN;
 			case CANCEL:
 				return gamepad.justPressed.B;
 			case CONFIRM:

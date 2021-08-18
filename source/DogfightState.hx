@@ -1,13 +1,12 @@
 package;
 
+import Color;
 import InputManager.Action;
 import flixel.FlxG;
-import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
 import flixel.util.FlxAxes;
-import flixel.util.FlxColor;
 
 using StringTools;
 
@@ -32,7 +31,7 @@ class DogfightState extends GameState
 		FlxG.worldBounds.set(0, 0, FlxG.width, FlxG.height);
 
 		player = new FlxSprite();
-		player.makeGraphic(8, 8, FlxColor.PINK);
+		player.makeGraphic(8, 8, Color.PINK);
 		player.screenCenter();
 		player.y = FlxG.height - 32;
 		add(player);
@@ -156,7 +155,7 @@ class DogfightState extends GameState
 		for (_ in 0...difficultyLevel)
 		{
 			var enemy = new FlxSprite();
-			enemy.makeGraphic(6, 6, FlxColor.ORANGE);
+			enemy.makeGraphic(6, 6, Color.ORANGE);
 			enemy.y = FlxG.random.float(-10, -100);
 			enemy.x = FlxG.random.float(0 + enemy.width, FlxG.width - enemy.width);
 			enemy.velocity.y = FlxG.random.float(20, 50);
@@ -167,7 +166,7 @@ class DogfightState extends GameState
 	function shootBullet(elapsed:Float):FlxSprite
 	{
 		var bullet = new FlxSprite();
-		bullet.makeGraphic(2, 2, FlxColor.RED);
+		bullet.makeGraphic(2, 2, Color.RED);
 		bullet.x = player.x + player.width / 2 - bullet.width / 2;
 		bullet.y = player.y - bullet.height;
 		bullet.velocity.y = -100;

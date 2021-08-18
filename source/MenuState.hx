@@ -1,19 +1,19 @@
 package;
 
+import Color;
 import GameType;
 import InputManager.Action;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxAxes;
-import flixel.util.FlxColor;
 
 class MenuState extends BaseState
 {
 	var selectedGame:GameState;
 	var games:Array<GameState> = [new GbloxState(), new SlitherState(), new DogfightState()];
 
-	override public function new(initialGameType:GameType = DOGFIGHT)
+	override public function new(initialGameType:GameType = SLITHER)
 	{
 		for (game in games)
 		{
@@ -27,7 +27,7 @@ class MenuState extends BaseState
 	{
 		super.create();
 
-		add(new FlxSprite(0, 0).makeGraphic(FlxG.width, FlxG.height, FlxColor.PINK));
+		add(new FlxSprite(0, 0).makeGraphic(FlxG.width, FlxG.height, Color.BLUE));
 
 		addText("Mimeo", 24).screenCenter(FlxAxes.X);
 

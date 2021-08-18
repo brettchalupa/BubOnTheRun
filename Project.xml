@@ -31,8 +31,7 @@
 
 	<set name="BUILD_DIR" value="export" />
 	<source path="source" />
-	<assets path="assets">
-	</assets>
+	<assets path="assets" />
 	<assets path="assets">
 		<font path="fonts/FairfaxHD.ttf" id="FairfaxHD" />
 		<font path="fonts/Fairfax.ttf" id="Fairfax" />

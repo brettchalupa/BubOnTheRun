@@ -1,3 +1,4 @@
+import Color;
 import InputManager;
 import flixel.FlxState;
 import flixel.math.FlxPoint;
@@ -11,6 +12,7 @@ class BaseState extends FlxState
 	{
 		var text = new FlxText(x, y, 0, text, size);
 		text.font = "Fairfax";
+		text.borderColor = Color.BLACK;
 		add(text);
 		return text;
 	}

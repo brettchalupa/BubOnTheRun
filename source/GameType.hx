@@ -1,0 +1,7 @@
+enum GameType
+{
+	SLITHER;
+	DOGFIGHT;
+	GBLOX;
+	DEFAULT;
+}

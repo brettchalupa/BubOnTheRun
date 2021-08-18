@@ -16,7 +16,7 @@
 	<!-- ____________________________ Window Settings ___________________________ -->
 
 	<!--These window settings apply to all targets-->
-	<window width="640" height="480" fps="60" background="#000000" hardware="true" vsync="false" />
+	<window width="960" height="640" fps="60" background="#000000" hardware="true" vsync="false" />
 
 	<!--HTML5-specific-->
 	<window if="html5" resizable="false" />
@@ -31,7 +31,13 @@
 
 	<set name="BUILD_DIR" value="export" />
 	<source path="source" />
-	<assets path="assets" />
+	<assets path="assets">
+	</assets>
+	<assets path="assets">
+		<font path="fonts/FairfaxHD.ttf" id="FairfaxHD" />
+		<font path="fonts/Fairfax.ttf" id="Fairfax" />
+	</assets>
+
 
 	<!-- _______________________________ Libraries ______________________________ -->
 

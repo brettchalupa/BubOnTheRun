@@ -4,6 +4,7 @@ import GameType;
 import InputManager.Action;
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.util.FlxAxes;
 
 class GameState extends BaseState
 {
@@ -13,15 +14,12 @@ class GameState extends BaseState
 	{
 		super.create();
 
-		var text = new flixel.text.FlxText(0, 4, 0, slug(), 12);
-		text.screenCenter();
-		text.font = "Fairfax";
-		add(text);
+		addText(slug(), 12, 6, 6);
 	}
 
 	override public function update(elapsed:Float)
 	{
-		if (input.released(Action.CANCEL))
+		if (input.justReleased(Action.CANCEL))
 		{
 			FlxG.switchState(new MenuState(gameType()));
 		}

@@ -4,7 +4,6 @@ import GameType;
 import InputManager.Action;
 import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.text.FlxText;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxAxes;
 import flixel.util.FlxColor;
@@ -14,7 +13,7 @@ class MenuState extends BaseState
 	var selectedGame:GameState;
 	var games:Array<GameState> = [new GbloxState(), new SlitherState(), new DogfightState()];
 
-	override public function new(initialGameType:GameType = GBLOX)
+	override public function new(initialGameType:GameType = DOGFIGHT)
 	{
 		for (game in games)
 		{
@@ -30,15 +29,9 @@ class MenuState extends BaseState
 
 		add(new FlxSprite(0, 0).makeGraphic(FlxG.width, FlxG.height, FlxColor.PINK));
 
-		var title = new FlxText(0, 4, 0, "Mimeo", 24);
-		title.font = "Fairfax";
-		title.screenCenter(FlxAxes.X);
-		add(title);
+		addText("Mimeo", 24).screenCenter(FlxAxes.X);
 
-		var help = new FlxText(0, FlxG.height - 12 - 20, 0, "Select a game", 12);
-		help.font = "Fairfax";
-		help.screenCenter(FlxAxes.X);
-		add(help);
+		addText("Select a game", 12, 0, FlxG.height - 12 - 20).screenCenter(FlxAxes.X);
 
 		for (game in games)
 		{
@@ -59,7 +52,7 @@ class MenuState extends BaseState
 
 	override public function update(elapsed:Float)
 	{
-		if (input.released(Action.LEFT))
+		if (input.justReleased(Action.LEFT))
 		{
 			var index = games.indexOf(selectedGame);
 			index = index - 1;
@@ -72,7 +65,7 @@ class MenuState extends BaseState
 			positionGames();
 		}
 
-		if (input.released(Action.RIGHT))
+		if (input.justReleased(Action.RIGHT))
 		{
 			var index = games.indexOf(selectedGame);
 			index = index + 1;
@@ -86,13 +79,13 @@ class MenuState extends BaseState
 		}
 
 		#if desktop
-		if (input.released(Action.CANCEL))
+		if (input.justReleased(Action.CANCEL))
 		{
 			Sys.exit(0);
 		}
 		#end
 
-		if (input.released(Action.CONFIRM))
+		if (input.justReleased(Action.CONFIRM))
 		{
 			FlxG.switchState(selectedGame);
 		}

@@ -27,6 +27,8 @@ class MenuState extends BaseState
 	{
 		super.create();
 
+		FlxG.sound.pause();
+
 		add(new FlxSprite(0, 0).makeGraphic(FlxG.width, FlxG.height, Color.BLUE));
 
 		addText("Mimeo", 24).screenCenter(FlxAxes.X);

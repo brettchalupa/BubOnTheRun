@@ -148,6 +148,13 @@ class SlitherState extends GameState
 				}
 			}
 
+			#if debug
+			if (input.justPressed(Action.CONFIRM))
+			{
+				generatePart();
+			}
+			#end
+
 			if (timeSinceLastMove > (MOVE_ELAPSED / (1 + (parts.length * 0.1))))
 			{
 				lastPlayerX = player.x;
@@ -257,7 +264,7 @@ class SlitherState extends GameState
 
 	function generatePart()
 	{
-		var part = new FlxSprite().makeGraphic(TILE_SIZE, TILE_SIZE, Color.BLUE);
+		var part = new FlxSprite(-100, -100).makeGraphic(TILE_SIZE, TILE_SIZE, Color.BLUE);
 		parts.push(part);
 		add(part);
 		updateSizeText();

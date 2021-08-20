@@ -13,8 +13,6 @@ class GameState extends BaseState
 	override public function create()
 	{
 		super.create();
-
-		addText(slug(), 12, 2, 2);
 	}
 
 	override public function update(elapsed:Float)

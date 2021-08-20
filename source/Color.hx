@@ -9,4 +9,5 @@ class Color
 	public static inline final PINK = 0xFFFF80A4;
 	public static inline final RED = 0xFFD62411;
 	public static inline final WHITE = 0xFFFAFDFF;
+	public static inline final YELLOW = 0xFFFFD100;
 }

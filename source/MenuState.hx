@@ -11,7 +11,7 @@ import flixel.util.FlxAxes;
 class MenuState extends BaseState
 {
 	var selectedGame:GameState;
-	var games:Array<GameState> = [new GbloxState(), new SlitherState(), new DogfightState()];
+	var games:Array<GameState> = [new GbloxState(), new SlitherState(), new DogfightState(), new QuickDrawState()];
 
 	override public function new(initialGameType:GameType = SLITHER)
 	{

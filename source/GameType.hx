@@ -4,4 +4,5 @@ enum GameType
 	DOGFIGHT;
 	GBLOX;
 	DEFAULT;
+	QUICK_DRAW;
 }

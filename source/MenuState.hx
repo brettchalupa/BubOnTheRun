@@ -7,6 +7,7 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxAxes;
+import haxe.iterators.StringKeyValueIterator;
 
 class MenuState extends BaseState
 {
@@ -16,10 +17,11 @@ class MenuState extends BaseState
 		new SlitherState(),
 		new DogfightState(),
 		new QuickDrawState(),
-		new RoyaltyState()
+		new RoyaltyState(),
+		new HeartsState()
 	];
 
-	override public function new(initialGameType:GameType = ROYALTY)
+	override public function new(initialGameType:GameType = HEARTS)
 	{
 		for (game in games)
 		{

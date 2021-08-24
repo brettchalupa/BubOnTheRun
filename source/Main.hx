@@ -2,6 +2,7 @@ package;
 
 import flixel.FlxG;
 import flixel.FlxGame;
+import flixel.system.FlxAssets;
 import openfl.display.Sprite;
 
 class Main extends Sprite
@@ -15,5 +16,7 @@ class Main extends Sprite
 		{
 			FlxG.mouse.visible = false;
 		}
+
+		FlxAssets.FONT_DEFAULT = "Fairfax";
 	}
 }

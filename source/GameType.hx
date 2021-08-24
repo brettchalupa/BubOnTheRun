@@ -5,4 +5,5 @@ enum GameType
 	GBLOX;
 	DEFAULT;
 	QUICK_DRAW;
+	ROYALTY;
 }

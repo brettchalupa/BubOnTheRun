@@ -25,10 +25,10 @@ class InputManager
 				return FlxG.keys.justReleased.RIGHT || justReleasedGamepad(action);
 
 			case CANCEL:
-				return FlxG.keys.justReleased.BACKSPACE || FlxG.keys.justReleased.X || justReleasedGamepad(action);
+				return FlxG.keys.justReleased.BACKSPACE || FlxG.keys.justReleased.Z || justReleasedGamepad(action);
 
 			case CONFIRM:
-				return FlxG.keys.justReleased.ENTER || FlxG.keys.justPressed.SPACE || FlxG.keys.justReleased.Z || justReleasedGamepad(action);
+				return FlxG.keys.justReleased.ENTER || FlxG.keys.justPressed.SPACE || FlxG.keys.justReleased.X || justReleasedGamepad(action);
 
 			default:
 				return false;
@@ -68,10 +68,10 @@ class InputManager
 				return FlxG.keys.pressed.RIGHT || pressedGamepad(action);
 
 			case CANCEL:
-				return FlxG.keys.pressed.BACKSPACE || FlxG.keys.pressed.X || justReleasedGamepad(action);
+				return FlxG.keys.pressed.BACKSPACE || FlxG.keys.pressed.Z || justReleasedGamepad(action);
 
 			case CONFIRM:
-				return FlxG.keys.pressed.ENTER || FlxG.keys.justPressed.SPACE || FlxG.keys.pressed.Z || justReleasedGamepad(action);
+				return FlxG.keys.pressed.ENTER || FlxG.keys.justPressed.SPACE || FlxG.keys.pressed.X || justReleasedGamepad(action);
 
 			default:
 				return false;
@@ -115,10 +115,10 @@ class InputManager
 				return FlxG.keys.justPressed.DOWN || justPressedGamepad(action);
 
 			case CANCEL:
-				return FlxG.keys.justPressed.BACKSPACE || FlxG.keys.justPressed.X || justReleasedGamepad(action);
+				return FlxG.keys.justPressed.BACKSPACE || FlxG.keys.justPressed.Z || justReleasedGamepad(action);
 
 			case CONFIRM:
-				return FlxG.keys.justPressed.ENTER || FlxG.keys.justPressed.SPACE || FlxG.keys.justPressed.Z || justReleasedGamepad(action);
+				return FlxG.keys.justPressed.ENTER || FlxG.keys.justPressed.SPACE || FlxG.keys.justPressed.X || justReleasedGamepad(action);
 
 			default:
 				return false;

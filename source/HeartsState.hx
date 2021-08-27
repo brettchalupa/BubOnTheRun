@@ -4,6 +4,8 @@ import InputManager.Action;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.text.FlxTypeText;
+import openfl.Assets;
+import openfl.utils.Assets;
 
 class HeartsState extends GameState
 {
@@ -20,6 +22,7 @@ class HeartsState extends GameState
 	var typeText:FlxTypeText;
 	var lines:Array<String>;
 	var currentLine = 0;
+	var characterPortrait:FlxSprite;
 
 	override public function create()
 	{
@@ -29,19 +32,16 @@ class HeartsState extends GameState
 
 		FlxG.cameras.bgColor = 0xff131c1b;
 
-		lines = [
-			"Hello, what are you doing here?",
-			"Oh, I see. You want to play a game. Well, let's play a game.",
-			"Guess what number I'm thinking..."
-		];
+		var scene1 = Assets.getText("assets/data/hearts/scene1.txt");
+		lines = scene1.split("\n");
 
-		typeText = new FlxTypeText(8, 16, FlxG.width - 30, "", 12, true);
+		typeText = new FlxTypeText(8, FlxG.height - 48, FlxG.width - 30, "", 12, true);
 
 		typeText.delay = 0.1;
 		typeText.eraseDelay = 0.2;
 		typeText.showCursor = true;
 		typeText.cursorBlinkSpeed = 1.0;
-		typeText.prefix = "Wolf: ";
+		typeText.prefix = "";
 		typeText.autoErase = true;
 		typeText.waitTime = 2.0;
 		typeText.setTypingVariation(0.75, true);
@@ -49,8 +49,11 @@ class HeartsState extends GameState
 		typeText.skipKeys = ["SPACE"];
 		typeText.useDefaultSound = true;
 		typeText.paused = true;
-
 		add(typeText);
+
+		characterPortrait = new FlxSprite(10, typeText.y - 16);
+		characterPortrait.visible = false;
+		add(characterPortrait);
 	}
 
 	override public function update(elapsed:Float)
@@ -61,7 +64,32 @@ class HeartsState extends GameState
 		{
 			if (typeText.paused)
 			{
-				typeText.resetText(lines[currentLine]);
+				var currentLine = lines[currentLine];
+				var split = currentLine.split(":");
+				var character:String = null;
+				var text;
+				if (split.length > 1)
+				{
+					character = split[0];
+					text = split.slice(1, split.length).join(":");
+				}
+				else
+				{
+					text = split[0];
+				}
+
+				typeText.resetText(text);
+				if (character != null)
+				{
+					typeText.prefix = '$character:';
+					characterPortrait.loadGraphic('assets/images/hearts/$character.png');
+					characterPortrait.visible = true;
+				}
+				else
+				{
+					characterPortrait.visible = false;
+				}
+
 				startText();
 			}
 			else

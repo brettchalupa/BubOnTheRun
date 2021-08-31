@@ -4,6 +4,7 @@ import InputManager.Action;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.text.FlxTypeText;
+import flixel.text.FlxText;
 import openfl.Assets;
 import openfl.utils.Assets;
 
@@ -23,6 +24,9 @@ class HeartsState extends GameState
 	var lines:Array<String>;
 	var currentLine = 0;
 	var characterPortrait:FlxSprite;
+	var currentlySpeakingText:FlxText;
+
+	final PORTRAIT_SIZE = 16;
 
 	override public function create()
 	{
@@ -35,23 +39,23 @@ class HeartsState extends GameState
 		var scene1 = Assets.getText("assets/data/hearts/scene1.txt");
 		lines = scene1.split("\n");
 
-		typeText = new FlxTypeText(8, FlxG.height - 48, FlxG.width - 30, "", 12, true);
+		typeText = new FlxTypeText(8, FlxG.height - 48, FlxG.width - 30, "", 12);
 
 		typeText.delay = 0.1;
 		typeText.eraseDelay = 0.2;
-		typeText.showCursor = true;
-		typeText.cursorBlinkSpeed = 1.0;
-		typeText.prefix = "";
+		typeText.showCursor = false;
 		typeText.autoErase = true;
 		typeText.waitTime = 2.0;
 		typeText.setTypingVariation(0.75, true);
 		typeText.color = Color.WHITE;
-		typeText.skipKeys = ["SPACE"];
 		typeText.useDefaultSound = true;
 		typeText.paused = true;
 		add(typeText);
 
-		characterPortrait = new FlxSprite(10, typeText.y - 16);
+		currentlySpeakingText = addText("", 12, typeText.x, typeText.y - 12, Color.BLUE);
+		currentlySpeakingText.visible = false;
+
+		characterPortrait = new FlxSprite(typeText.x + typeText.width - PORTRAIT_SIZE, typeText.y - PORTRAIT_SIZE);
 		characterPortrait.visible = false;
 		add(characterPortrait);
 	}
@@ -81,13 +85,15 @@ class HeartsState extends GameState
 				typeText.resetText(text);
 				if (character != null)
 				{
-					typeText.prefix = '$character:';
+					currentlySpeakingText.text = character;
+					currentlySpeakingText.visible = true;
 					characterPortrait.loadGraphic('assets/images/hearts/$character.png');
 					characterPortrait.visible = true;
 				}
 				else
 				{
 					characterPortrait.visible = false;
+					currentlySpeakingText.visible = false;
 				}
 
 				startText();

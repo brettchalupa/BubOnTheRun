@@ -6,5 +6,6 @@ enum GameType
 	HEARTS;
 	QUICK_DRAW;
 	ROYALTY;
+	RUNNY;
 	SLITHER;
 }

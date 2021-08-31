@@ -18,10 +18,11 @@ class MenuState extends BaseState
 		new DogfightState(),
 		new QuickDrawState(),
 		new RoyaltyState(),
-		new HeartsState()
+		new HeartsState(),
+		new RunnyState()
 	];
 
-	override public function new(initialGameType:GameType = HEARTS)
+	override public function new(initialGameType:GameType = RUNNY)
 	{
 		for (game in games)
 		{

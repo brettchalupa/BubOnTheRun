@@ -1,4 +1,6 @@
 import flixel.FlxG;
+import flixel.input.gamepad.FlxGamepadInputID;
+import flixel.input.keyboard.FlxKey;
 
 enum Action
 {
@@ -12,140 +14,112 @@ enum Action
 
 class InputManager
 {
+	static final LEFT_KEYS = [FlxKey.LEFT, FlxKey.A];
+	static final RIGHT_KEYS = [FlxKey.RIGHT, FlxKey.D];
+	static final UP_KEYS = [FlxKey.UP, FlxKey.W];
+	static final DOWN_KEYS = [FlxKey.DOWN, FlxKey.S];
+	static final CONFIRM_KEYS = [FlxKey.Z, FlxKey.J, FlxKey.ENTER, FlxKey.SPACE];
+	static final CANCEL_KEYS = [FlxKey.X, FlxKey.K, FlxKey.BACKSPACE, FlxKey.ESCAPE];
+
+	static final LEFT_BUTTONS = [FlxGamepadInputID.DPAD_LEFT, FlxGamepadInputID.LEFT_STICK_DIGITAL_LEFT];
+	static final RIGHT_BUTTONS = [FlxGamepadInputID.DPAD_RIGHT, FlxGamepadInputID.LEFT_STICK_DIGITAL_RIGHT];
+	static final UP_BUTTONS = [FlxGamepadInputID.DPAD_UP, FlxGamepadInputID.LEFT_STICK_DIGITAL_UP];
+	static final DOWN_BUTTONS = [FlxGamepadInputID.DPAD_DOWN, FlxGamepadInputID.LEFT_STICK_DIGITAL_DOWN];
+	static final CONFIRM_BUTTONS = [FlxGamepadInputID.A];
+	static final CANCEL_BUTTONS = [FlxGamepadInputID.B];
+
 	public function new() {}
 
 	public function justReleased(action:Action):Bool
 	{
-		switch action
-		{
-			case LEFT:
-				return FlxG.keys.justReleased.LEFT || justReleasedGamepad(action);
-
-			case RIGHT:
-				return FlxG.keys.justReleased.RIGHT || justReleasedGamepad(action);
-
-			case CANCEL:
-				return FlxG.keys.justReleased.BACKSPACE || FlxG.keys.justReleased.Z || justReleasedGamepad(action);
-
-			case CONFIRM:
-				return FlxG.keys.justReleased.ENTER || FlxG.keys.justPressed.SPACE || FlxG.keys.justReleased.X || justReleasedGamepad(action);
-
-			default:
-				return false;
-		}
-
-		return false;
+		return FlxG.keys.anyJustReleased(keysForAction(action)) || justReleasedGamepad(action);
 	}
 
 	private function justReleasedGamepad(action:Action):Bool
 	{
+		#if !FLX_NO_GAMEPAD
 		var gamepad = FlxG.gamepads.lastActive;
 		if (gamepad == null)
 			return false;
-		switch action
-		{
-			case LEFT:
-				return gamepad.justReleased.DPAD_LEFT || gamepad.justReleased.LEFT_STICK_DIGITAL_LEFT;
-			case RIGHT:
-				return gamepad.justReleased.DPAD_RIGHT || gamepad.justReleased.LEFT_STICK_DIGITAL_RIGHT;
-			case CANCEL:
-				return gamepad.justReleased.B;
-			case CONFIRM:
-				return gamepad.justReleased.A;
-			default:
-				return false;
-		}
+		return gamepad.anyJustReleased(buttonsForAction(action));
+		#else
+		return false;
+		#end
 	}
 
 	public function pressed(action:Action):Bool
 	{
-		switch action
-		{
-			case LEFT:
-				return FlxG.keys.pressed.LEFT || pressedGamepad(action);
-
-			case RIGHT:
-				return FlxG.keys.pressed.RIGHT || pressedGamepad(action);
-
-			case CANCEL:
-				return FlxG.keys.pressed.BACKSPACE || FlxG.keys.pressed.Z || justReleasedGamepad(action);
-
-			case CONFIRM:
-				return FlxG.keys.pressed.ENTER || FlxG.keys.justPressed.SPACE || FlxG.keys.pressed.X || justReleasedGamepad(action);
-
-			default:
-				return false;
-		}
+		return FlxG.keys.anyPressed(keysForAction(action)) || pressedGamepad(action);
 	}
 
 	private function pressedGamepad(action:Action):Bool
 	{
+		#if !FLX_NO_GAMEPAD
 		var gamepad = FlxG.gamepads.lastActive;
 		if (gamepad == null)
 			return false;
-		switch action
-		{
-			case LEFT:
-				return gamepad.pressed.DPAD_LEFT || gamepad.pressed.LEFT_STICK_DIGITAL_LEFT;
-			case RIGHT:
-				return gamepad.pressed.DPAD_RIGHT || gamepad.pressed.LEFT_STICK_DIGITAL_RIGHT;
-			case CANCEL:
-				return gamepad.pressed.B;
-			case CONFIRM:
-				return gamepad.pressed.A;
-			default:
-				return false;
-		}
+		return gamepad.anyPressed(buttonsForAction(action));
+		#else
+		return false;
+		#end
 	}
 
 	public function justPressed(action:Action):Bool
 	{
-		switch action
-		{
-			case LEFT:
-				return FlxG.keys.justPressed.LEFT || justPressedGamepad(action);
-
-			case RIGHT:
-				return FlxG.keys.justPressed.RIGHT || justPressedGamepad(action);
-
-			case UP:
-				return FlxG.keys.justPressed.UP || justPressedGamepad(action);
-
-			case DOWN:
-				return FlxG.keys.justPressed.DOWN || justPressedGamepad(action);
-
-			case CANCEL:
-				return FlxG.keys.justPressed.BACKSPACE || FlxG.keys.justPressed.Z || justReleasedGamepad(action);
-
-			case CONFIRM:
-				return FlxG.keys.justPressed.ENTER || FlxG.keys.justPressed.SPACE || FlxG.keys.justPressed.X || justReleasedGamepad(action);
-
-			default:
-				return false;
-		}
+		return FlxG.keys.anyJustPressed(keysForAction(action)) || justPressedGamepad(action);
 	}
 
 	private function justPressedGamepad(action:Action):Bool
 	{
+		#if !FLX_NO_GAMEPAD
 		var gamepad = FlxG.gamepads.lastActive;
 		if (gamepad == null)
 			return false;
+		return gamepad.anyJustPressed(buttonsForAction(action));
+		#else
+		return false;
+		#end
+	}
+
+	private function keysForAction(action:Action):Array<FlxKey>
+	{
 		switch action
 		{
 			case LEFT:
-				return gamepad.justPressed.DPAD_LEFT || gamepad.justPressed.LEFT_STICK_DIGITAL_LEFT;
+				return LEFT_KEYS;
 			case RIGHT:
-				return gamepad.justPressed.DPAD_RIGHT || gamepad.justPressed.LEFT_STICK_DIGITAL_RIGHT;
+				return RIGHT_KEYS;
 			case UP:
-				return gamepad.justPressed.DPAD_UP || gamepad.justPressed.LEFT_STICK_DIGITAL_UP;
+				return UP_KEYS;
 			case DOWN:
-				return gamepad.justPressed.DPAD_DOWN || gamepad.justPressed.LEFT_STICK_DIGITAL_DOWN;
+				return DOWN_KEYS;
 			case CANCEL:
-				return gamepad.justPressed.B;
+				return CANCEL_KEYS;
 			case CONFIRM:
-				return gamepad.justPressed.A;
+				return CONFIRM_KEYS;
 			default:
-				return false;
+				return [];
+		}
+	}
+
+	private function buttonsForAction(action:Action):Array<FlxGamepadInputID>
+	{
+		switch action
+		{
+			case LEFT:
+				return LEFT_BUTTONS;
+			case RIGHT:
+				return RIGHT_BUTTONS;
+			case UP:
+				return UP_BUTTONS;
+			case DOWN:
+				return DOWN_BUTTONS;
+			case CANCEL:
+				return CANCEL_BUTTONS;
+			case CONFIRM:
+				return CONFIRM_BUTTONS;
+			default:
+				return [];
 		}
 	}
 }

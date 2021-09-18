@@ -6,6 +6,8 @@ import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.group.FlxGroup;
 import flixel.math.FlxAngle;
+import flixel.math.FlxPoint;
+import flixel.math.FlxVelocity;
 import flixel.math.FlxVelocity;
 import flixel.util.FlxColor;
 import flixel.util.FlxSort;
@@ -16,7 +18,6 @@ class Player extends FlxSprite
 
 	final MAX_BASE_VEL = 70;
 	final MAX_THRUST_VEL = 160;
-	final DRAG = 50;
 	final THRUST_ACCEL = 120;
 	final BASE_ACCEL = 50;
 	final BRAKE_ACCEL = -40;
@@ -26,37 +27,45 @@ class Player extends FlxSprite
 	var lastAcceleration = 0.0;
 	var input:InputManager;
 	var timeSinceLastShot:Float = 0.0;
+	var thrust:Float = 0.0;
+	final MAX_ANGULAR = 120;
+	final ANGULAR_DRAG = 420;
+	final DRAG = 3;
 
 	public function new(_input:InputManager)
 	{
 		super();
 		input = _input;
-		loadRotatedGraphic("assets/images/spacevania/player.png", 16);
+		loadGraphic("assets/images/spacevania/player.png", 16);
 		screenCenter();
 		drag.set(DRAG, DRAG);
 		setSize(6, 6);
-		offset.set(1, 1);
+		centerOffsets();
 		solid = true;
+
+		maxAngular = MAX_ANGULAR;
+		angularDrag = ANGULAR_DRAG;
+		drag.x = DRAG;
 
 		bullets = new FlxTypedGroup<FlxSprite>(MAX_BULLETS);
 
 		for (i in 0...MAX_BULLETS)
 		{
-			var bullet = new FlxSprite().loadRotatedGraphic("assets/images/spacevania/bullet.png", 16);
-			bullet.setSize(2, 1);
+			var bullet = new FlxSprite().loadGraphic("assets/images/spacevania/bullet.png", 16);
+			bullet.setSize(1, 2);
 			bullet.kill();
 			bullets.add(bullet);
 		}
 
+		#if debug
 		FlxG.watch.add(this, "angle");
 		FlxG.watch.add(this, "velocity");
 		FlxG.watch.add(this, "acceleration");
+		#end
 	}
 
 	override public function update(elapsed:Float):Void
 	{
-		super.update(elapsed);
-
 		handleInput(elapsed);
 
 		bullets.forEachAlive(function(b)
@@ -66,6 +75,8 @@ class Player extends FlxSprite
 				b.kill();
 			}
 		});
+
+		super.update(elapsed);
 	}
 
 	public function handleInput(elapsed:Float)
@@ -89,42 +100,40 @@ class Player extends FlxSprite
 		var bullet = bullets.recycle(FlxSprite);
 		bullet.setPosition(getMidpoint().x, getMidpoint().y);
 		bullet.angle = angle;
-		bullet.velocity.set(velocity.x * 2, velocity.y * 2);
-		bullet.acceleration.set(acceleration.x * 2, acceleration.y * 2);
+		bullet.velocity.set(0, -100);
+		bullet.velocity.rotate(FlxPoint.weak(0, 0), bullet.angle);
 	}
 
 	function handleSteering(elapsed:Float)
 	{
-		var acceleration = lastAcceleration;
-		var frameTime = elapsed * FlxG.updateFramerate;
-		var maxVel = MAX_BASE_VEL;
+		if (input.pressed(Action.LEFT))
+		{
+			angularAcceleration = -angularDrag;
+		}
+		else if (input.pressed(Action.RIGHT))
+		{
+			angularAcceleration = angularDrag;
+		}
+		else
+		{
+			angularAcceleration = 0;
+		}
+
+		var _up:Bool = false;
+		var _down:Bool = false;
+
 		if (input.pressed(Action.UP))
 		{
 			color = Color.PINK;
-			acceleration = THRUST_ACCEL * frameTime;
-			maxVel = MAX_THRUST_VEL;
-		}
-		else if (input.pressed(Action.DOWN))
-		{
-			color = Color.ORANGE;
-			acceleration = BRAKE_ACCEL * frameTime;
+			_up = true;
 		}
 		else
 		{
 			color = Color.WHITE;
-			acceleration = BASE_ACCEL * frameTime;
 		}
-		if (input.pressed(Action.LEFT))
-		{
-			angle -= (ANG_CHANGE_PER_SEC * frameTime);
-		}
-		else if (input.pressed(Action.RIGHT))
-		{
-			angle += (ANG_CHANGE_PER_SEC * frameTime);
-		}
-		FlxG.watch.addQuick('update#acceleration', acceleration);
-		FlxG.watch.addQuick('update#frameTime', frameTime);
-		FlxVelocity.accelerateFromAngle(this, FlxAngle.asRadians(angle), acceleration, maxVel, false);
-		lastAcceleration = acceleration;
+
+		thrust = FlxVelocity.computeVelocity(thrust, (_up ? 90 : 0), drag.x, 60, elapsed);
+		velocity.set(0, -thrust);
+		velocity.rotate(FlxPoint.weak(0, 0), angle);
 	}
 }

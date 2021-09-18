@@ -14,15 +14,15 @@ class Player extends FlxSprite
 {
 	public var bullets:FlxTypedGroup<FlxSprite>;
 
-	final MAX_BASE_VEL = 60;
-	final MAX_THRUST_VEL = 200;
-	final DRAG = 100;
-	final THRUST_ACCEL = 160;
-	final BASE_ACCEL = 40;
+	final MAX_BASE_VEL = 70;
+	final MAX_THRUST_VEL = 160;
+	final DRAG = 50;
+	final THRUST_ACCEL = 120;
+	final BASE_ACCEL = 50;
 	final BRAKE_ACCEL = -40;
-	final ANG_CHANGE_PER_SEC = 2;
+	final ANG_CHANGE_PER_SEC = 3;
 	final MAX_BULLETS = 40;
-	final SHOT_COOLDOWN = 0.33;
+	final SHOT_COOLDOWN = 0.25;
 	var lastAcceleration = 0.0;
 	var input:InputManager;
 	var timeSinceLastShot:Float = 0.0;
@@ -31,16 +31,19 @@ class Player extends FlxSprite
 	{
 		super();
 		input = _input;
-		makeGraphic(10, 4, Color.WHITE);
+		loadRotatedGraphic("assets/images/spacevania/player.png", 16);
 		screenCenter();
 		drag.set(DRAG, DRAG);
+		setSize(6, 6);
+		offset.set(1, 1);
 		solid = true;
 
 		bullets = new FlxTypedGroup<FlxSprite>(MAX_BULLETS);
 
 		for (i in 0...MAX_BULLETS)
 		{
-			var bullet = new FlxSprite().makeGraphic(2, 2, Color.WHITE);
+			var bullet = new FlxSprite().loadRotatedGraphic("assets/images/spacevania/bullet.png", 16);
+			bullet.setSize(2, 1);
 			bullet.kill();
 			bullets.add(bullet);
 		}
@@ -52,7 +55,6 @@ class Player extends FlxSprite
 
 	override public function update(elapsed:Float):Void
 	{
-		trace("player update");
 		super.update(elapsed);
 
 		handleInput(elapsed);
@@ -85,8 +87,9 @@ class Player extends FlxSprite
 	{
 		var bullet = bullets.recycle(FlxSprite);
 		bullet.setPosition(getMidpoint().x, getMidpoint().y);
-		bullet.velocity.set(velocity.x, velocity.y);
-		FlxVelocity.accelerateFromAngle(bullet, FlxAngle.asRadians(angle), 100, 100);
+		bullet.angle = angle;
+		bullet.velocity.set(velocity.x * 2, velocity.y * 2);
+		bullet.acceleration.set(acceleration.x * 2, acceleration.y * 2);
 	}
 
 	function handleSteering(elapsed:Float)

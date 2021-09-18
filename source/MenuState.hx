@@ -22,7 +22,7 @@ class MenuState extends BaseState
 		new SpacevaniaState()
 	];
 
-	override public function new(initialGameType:GameType = RUNNY)
+	override public function new(initialGameType:GameType = SPACEVANIA)
 	{
 		for (game in games)
 		{

@@ -22,8 +22,10 @@ class Player extends FlxSprite
 	final BRAKE_ACCEL = -40;
 	final ANG_CHANGE_PER_SEC = 2;
 	final MAX_BULLETS = 40;
+	final SHOT_COOLDOWN = 0.33;
 	var lastAcceleration = 0.0;
 	var input:InputManager;
+	var timeSinceLastShot:Float = 0.0;
 
 	public function new(_input:InputManager)
 	{
@@ -68,9 +70,14 @@ class Player extends FlxSprite
 	{
 		handleSteering(elapsed);
 
-		if (input.pressed(Action.CONFIRM))
+		if (input.pressed(Action.CONFIRM) && timeSinceLastShot >= SHOT_COOLDOWN)
 		{
+			timeSinceLastShot = 0.0;
 			fireBullet();
+		}
+		else
+		{
+			timeSinceLastShot += elapsed;
 		}
 	}
 

@@ -7,6 +7,6 @@ enum GameType
 	QUICK_DRAW;
 	ROYALTY;
 	RUNNY;
-	RUNNY2;
 	SLITHER;
+	SPACEVANIA;
 }

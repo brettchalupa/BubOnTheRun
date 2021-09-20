@@ -19,7 +19,8 @@ class MenuState extends BaseState
 		new RoyaltyState(),
 		new HeartsState(),
 		new RunnyState(),
-		new SpacevaniaState()
+		new SpacevaniaState(),
+		new BulletHeckState()
 	];
 
 	override public function new(initialGameType:GameType = SPACEVANIA)

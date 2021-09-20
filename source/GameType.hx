@@ -9,4 +9,5 @@ enum GameType
 	RUNNY;
 	SLITHER;
 	SPACEVANIA;
+	BULLET_HECK;
 }

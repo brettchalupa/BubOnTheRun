@@ -48,7 +48,7 @@ class RunnyState extends GameState
 	final JUMP_VEL_Y = -140;
 	final JUMP_VEL_X = 160;
 	final GROUND_HEIGHT = 200;
-	final GROUND_COLORS = [Color.LIGHT_BLUE, Color.GREEN, Color.ORANGE, Color.PINK, Color.YELLOW];
+	final GROUND_COLORS = [Color.LIGHT_BLUE, Color.LIGHT_GREEN, Color.ORANGE, Color.PINK, Color.YELLOW];
 
 	override public function create()
 	{
@@ -86,7 +86,7 @@ class RunnyState extends GameState
 		player = new FlxSprite();
 		player.loadGraphic("assets/images/runny/player.png", true, 16, 16);
 		player.screenCenter();
-		player.animation.add("walk", [2, 3], 5, true);
+		player.animation.add("walk", [2, 3], 7, true);
 		player.animation.add("jump", [4]);
 		player.animation.add("wall", [5]);
 		player.acceleration.set(ACCEL_X, ACCEL_Y);

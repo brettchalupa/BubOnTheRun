@@ -58,8 +58,8 @@ class RunnyState extends GameState
 		player.animation.add("walk", [2, 3], 5, true);
 		player.animation.add("jump", [4]);
 		player.animation.add("wall", [5]);
-		player.acceleration.set(100, 900);
-		player.maxVelocity.set(200, 400);
+		player.acceleration.set(160, 900);
+		player.maxVelocity.set(120, 600);
 		player.setSize(12, 9);
 		player.offset.set(2, 7);
 		player.solid = true;
@@ -159,7 +159,7 @@ class RunnyState extends GameState
 			jumpTimer = -1;
 		}
 
-		if (jumpTimer > 0 && jumpTimer < 0.50)
-			player.velocity.y = ((player.velocity.x * 1.1 / 10 * 4) + 200) * -1;
+		if (jumpTimer > 0 && jumpTimer < 0.25)
+			player.velocity.y = -200;
 	}
 }

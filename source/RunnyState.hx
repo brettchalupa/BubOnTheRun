@@ -14,6 +14,7 @@ import flixel.util.FlxColor;
 import flixel.util.FlxSort;
 
 using StringTools;
+using flixel.util.FlxSpriteUtil;
 
 class RunnyState extends GameState
 {
@@ -34,6 +35,8 @@ class RunnyState extends GameState
 	var isGameOver:Bool = false;
 	var totalElapsedTime:Float = 0.0;
 	var elapsedTimeText:FlxBitmapText;
+	var startHud:FlxTypedGroup<FlxSprite>;
+	var hud:FlxTypedGroup<FlxSprite>;
 
 	final MAX_VEL_X = 140;
 	final MAX_VEL_Y = 800;
@@ -52,6 +55,7 @@ class RunnyState extends GameState
 		FlxG.cameras.bgColor = Color.BLACK;
 
 		add(new FlxBackdrop("assets/images/runny/bg.png"));
+
 		var ground = new FlxSprite(0, FlxG.height - 10).makeGraphic(randomGroundWidth(), GROUND_HEIGHT, Color.PINK);
 		ground.immovable = true;
 		var ground2 = new FlxSprite(ground.x + ground.width + 20, ground.y).makeGraphic(randomGroundWidth(), GROUND_HEIGHT, Color.GREEN);
@@ -67,9 +71,11 @@ class RunnyState extends GameState
 		grounds.add(ground3);
 		grounds.add(ground4);
 		add(grounds);
+		grounds.kill();
 
-		player = new FlxSprite(10, FlxG.height - 30);
+		player = new FlxSprite();
 		player.loadGraphic("assets/images/runny/player.png", true, 16, 16);
+		player.screenCenter();
 		player.animation.add("walk", [2, 3], 5, true);
 		player.animation.add("jump", [4]);
 		player.animation.add("wall", [5]);
@@ -78,25 +84,55 @@ class RunnyState extends GameState
 		player.setSize(12, 9);
 		player.offset.set(2, 7);
 		player.solid = true;
-		add(player);
+		player.active = false;
 
-		var hudBar = new FlxSprite(0, 0);
-		hudBar.makeGraphic(FlxG.width, 16, Color.WHITE);
-		hudBar.scrollFactor.set(0, 0);
-		add(hudBar);
+		hud = new FlxTypedGroup<FlxSprite>();
+
+		var hudBg = new FlxSprite(0, 0);
+		hudBg.makeGraphic(FlxG.width, 16, Color.WHITE);
+		hudBg.scrollFactor.set(0, 0);
+		hud.add(hudBg);
 
 		elapsedTimeText = new MimeoText("");
 		elapsedTimeText.setPosition(4, 4);
 		elapsedTimeText.scrollFactor.set(0, 0);
-		add(elapsedTimeText);
+		hud.add(elapsedTimeText);
 
 		var instructionsText = new MimeoText("outrun ur inner-demons");
 		instructionsText.y = 4;
 		instructionsText.x = FlxG.width - instructionsText.width - 2;
 		instructionsText.scrollFactor.set(0, 0);
-		add(instructionsText);
+		hud.add(instructionsText);
+
+		add(hud);
+		hud.kill();
+
+		startHud = new FlxTypedGroup<FlxSprite>();
+		var startBg = new FlxSprite();
+		startBg.makeGraphic(FlxG.width, Std.int(FlxG.height), Color.WHITE);
+		startHud.add(startBg);
+		var titleText = new MimeoText("BUB ON THE RUN");
+		titleText.screenCenter();
+		titleText.y -= 32;
+		startHud.add(titleText);
+		var premiseText = new MimeoText("outrun ur inner-demons");
+		premiseText.screenCenter();
+		premiseText.y += 16;
+		startHud.add(premiseText);
+		var startText = new MimeoText("tap to start");
+		startText.screenCenter();
+		startText.y = premiseText.y + 24;
+		startText.flicker(0, 0.5);
+		startHud.add(startText);
+		for (item in startHud)
+		{
+			item.scrollFactor.set(0, 0);
+		}
+		add(startHud);
 
 		updateTotalElapsedTime(0.0);
+
+		add(player);
 
 		#if debug
 		FlxG.debugger.drawDebug;
@@ -106,45 +142,64 @@ class RunnyState extends GameState
 		FlxG.watch.add(player, "x");
 		FlxG.watch.add(player, "y");
 		#end
-
-		FlxG.worldBounds.set(0, 0, 100000000, FlxG.height * 2);
-		FlxG.camera.follow(player, FlxCameraFollowStyle.PLATFORMER, 1);
 	}
 
 	override public function update(elapsed:Float)
 	{
 		super.update(elapsed);
 
-		if (!isGameOver)
+		if (player.active)
 		{
-			FlxG.collide(grounds, player);
-
-			handleJump(elapsed);
-
-			if (player.y > (FlxG.height * 2))
+			if (!isGameOver)
 			{
-				isGameOver = true;
-				FlxG.camera.flash(Color.WHITE, 0.5, function()
+				FlxG.collide(grounds, player);
+
+				handleJump(elapsed);
+
+				if (player.y > (FlxG.height * 2))
 				{
-					FlxG.camera.fade(Color.BLACK, 1, false, function()
+					isGameOver = true;
+					FlxG.camera.flash(Color.WHITE, 0.5, function()
 					{
-						FlxG.resetState();
+						FlxG.camera.fade(Color.BLACK, 1, false, function()
+						{
+							FlxG.resetState();
+						});
 					});
+				}
+
+				for (ground in grounds)
+				{
+					if ((ground.x + ground.width < player.x) && !ground.isOnScreen(FlxG.camera))
+					{
+						positionGround(ground);
+					}
+				}
+
+				updateTotalElapsedTime(elapsed);
+			}
+
+			animatePlayer();
+		}
+		else
+		{
+			if (input.justPressed(CONFIRM))
+			{
+				startHud.kill();
+				FlxG.camera.follow(player, FlxCameraFollowStyle.PLATFORMER, 1);
+				player.setPosition(10, FlxG.height - 70);
+				player.visible = false;
+
+				FlxG.camera.flash(Color.WHITE, 1, function()
+				{
+					FlxG.worldBounds.set(0, 0, 100000000, FlxG.height * 2);
+					grounds.revive();
+					hud.revive();
+					player.active = true;
+					player.visible = true;
 				});
 			}
-
-			for (ground in grounds)
-			{
-				if ((ground.x + ground.width < player.x) && !ground.isOnScreen(FlxG.camera))
-				{
-					positionGround(ground);
-				}
-			}
-
-			updateTotalElapsedTime(elapsed);
 		}
-
-		animatePlayer();
 	}
 
 	function updateTotalElapsedTime(elapsed:Float)

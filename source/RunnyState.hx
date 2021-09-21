@@ -5,6 +5,7 @@ import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
+import flixel.addons.display.FlxBackdrop;
 import flixel.graphics.frames.FlxBitmapFont;
 import flixel.group.FlxGroup;
 import flixel.math.FlxPoint;
@@ -34,29 +35,32 @@ class RunnyState extends GameState
 	var totalElapsedTime:Float = 0.0;
 	var elapsedTimeText:FlxBitmapText;
 
-	final MAX_VEL_X = 120;
+	final MAX_VEL_X = 140;
 	final MAX_VEL_Y = 800;
-	final ACCEL_X = 160;
+	final ACCEL_X = 180;
 	final ACCEL_Y = 900;
 	final JUMP_VEL_Y = -140;
 	final JUMP_VEL_X = 160;
+	final GROUND_HEIGHT = 200;
 
 	override public function create()
 	{
 		super.create();
 
-		FlxG.cameras.bgColor = Color.PURPLE;
+		FlxG.cameras.bgColor = Color.BLACK;
 
-		var ground = new FlxSprite(0, FlxG.height - 10).makeGraphic(Std.int(FlxG.width / 2), 10, Color.PINK);
+		add(new FlxBackdrop("assets/images/runny/bg.png"));
+
+		var ground = new FlxSprite(0, FlxG.height - 10).makeGraphic(randomGroundWidth(), GROUND_HEIGHT, Color.PINK);
 		ground.immovable = true;
 
-		var ground2 = new FlxSprite(ground.x + ground.width + 20, FlxG.height - 10).makeGraphic(Std.int(FlxG.width / 2), 10, Color.GREEN);
+		var ground2 = new FlxSprite(ground.x + ground.width + 20, ground.y).makeGraphic(randomGroundWidth(), GROUND_HEIGHT, Color.GREEN);
 		ground2.immovable = true;
 
-		var ground3 = new FlxSprite(ground2.x + ground2.width + 20, FlxG.height - 10).makeGraphic(Std.int(FlxG.width / 2), 10, Color.ORANGE);
+		var ground3 = new FlxSprite(ground2.x + ground2.width + 10, ground.y).makeGraphic(randomGroundWidth(), GROUND_HEIGHT, Color.ORANGE);
 		ground3.immovable = true;
 
-		var ground4 = new FlxSprite(ground3.x + ground3.width + 20, FlxG.height - 10).makeGraphic(Std.int(FlxG.width / 2), 10, Color.YELLOW);
+		var ground4 = new FlxSprite(ground3.x + ground3.width + 40, ground.y).makeGraphic(randomGroundWidth(), GROUND_HEIGHT, Color.YELLOW);
 		ground4.immovable = true;
 
 		grounds = new FlxTypedGroup<FlxSprite>();
@@ -78,13 +82,21 @@ class RunnyState extends GameState
 		player.solid = true;
 		add(player);
 
+		var hudBar = new FlxSprite(0, 0);
+		hudBar.makeGraphic(FlxG.width, 16, Color.WHITE);
+		hudBar.scrollFactor.set(0, 0);
+		add(hudBar);
+
 		elapsedTimeText = new MimeoText("");
-		elapsedTimeText.color = FlxColor.fromInt(0xff000000);
-		elapsedTimeText.useTextColor = true;
-		elapsedTimeText.textColor = FlxColor.fromInt(0xffffffff);
 		elapsedTimeText.setPosition(4, 4);
 		elapsedTimeText.scrollFactor.set(0, 0);
 		add(elapsedTimeText);
+
+		var instructionsText = new MimeoText("outrun ur inner-demons");
+		instructionsText.y = 4;
+		instructionsText.x = FlxG.width - instructionsText.width - 2;
+		instructionsText.scrollFactor.set(0, 0);
+		add(instructionsText);
 
 		updateTotalElapsedTime(0.0);
 
@@ -98,7 +110,12 @@ class RunnyState extends GameState
 		#end
 
 		FlxG.worldBounds.set(0, 0, 100000000, FlxG.height * 2);
-		FlxG.camera.follow(player, FlxCameraFollowStyle.TOPDOWN);
+		FlxG.camera.follow(player, FlxCameraFollowStyle.PLATFORMER, 1);
+	}
+
+	function randomGroundWidth():Int
+	{
+		return FlxG.random.int(Std.int(FlxG.width / 3), Std.int(FlxG.width * 0.75));
 	}
 
 	override public function update(elapsed:Float)
@@ -125,7 +142,7 @@ class RunnyState extends GameState
 
 			for (ground in grounds)
 			{
-				if (ground.x + ground.width < player.x - FlxG.camera.width / 2)
+				if ((ground.x + ground.width < player.x) && !ground.isOnScreen(FlxG.camera))
 				{
 					positionGround(ground);
 				}
@@ -176,7 +193,8 @@ class RunnyState extends GameState
 			return FlxSort.byValues(order, obj1.x, obj2.x);
 		}, FlxSort.ASCENDING);
 		var lastGround = grounds.members[grounds.length - 1];
-		ground.x = lastGround.x + lastGround.width + FlxG.random.int(20, 40);
+		ground.x = lastGround.x + lastGround.width + FlxG.random.int(20, 80);
+		ground.y = lastGround.y - FlxG.random.int(-30, 30);
 	}
 
 	function handleJump(elapsed:Float)

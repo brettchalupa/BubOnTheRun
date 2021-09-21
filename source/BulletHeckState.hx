@@ -5,7 +5,6 @@ import InputManager.Action;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
-import flixel.text.FlxText;
 import flixel.util.FlxAxes;
 
 using StringTools;
@@ -21,7 +20,7 @@ class BulletHeckState extends GameState
 	var bullets:FlxTypedGroup<FlxSprite>;
 	var enemies:FlxTypedGroup<FlxSprite>;
 	var score:Int = 0;
-	var scoreText:FlxText;
+	var scoreText:MimeoText;
 	var gameOver:Bool = false;
 	var difficultyLevel = 1;
 

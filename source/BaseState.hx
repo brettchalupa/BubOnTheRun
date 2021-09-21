@@ -1,18 +1,16 @@
 import Color;
 import InputManager;
 import flixel.FlxState;
-import flixel.math.FlxPoint;
-import flixel.text.FlxText;
 
 class BaseState extends FlxState
 {
 	var input:InputManager = new InputManager();
 
-	function addText(text:String, size:Int = 12, x:Float = 0, y:Float = 0, color:Int = Color.WHITE):FlxText
+	function addText(_text:String, _size:Int = 12, _x:Float = 0, _y:Float = 0, _color:Int = Color.WHITE):MimeoText
 	{
-		var text = new FlxText(x, y, 0, text, size);
-		text.font = "Fairfax";
-		text.color = color;
+		var text = new MimeoText(_text);
+		text.setPosition(_x, _y);
+		text.textColor = _color;
 		add(text);
 		return text;
 	}

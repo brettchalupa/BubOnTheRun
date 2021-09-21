@@ -5,7 +5,6 @@ import InputManager.Action;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.math.FlxPoint;
-import flixel.text.FlxText;
 import flixel.util.FlxAxes;
 import flixel.util.FlxTimer;
 
@@ -40,7 +39,7 @@ class SlitherState extends GameState
 	var lastPlayerY:Float = 0.0;
 	var gameOver:Bool = false;
 	var field:FlxSprite;
-	var sizeText:FlxText;
+	var sizeText:MimeoText;
 
 	static final MOVE_ELAPSED:Float = 0.25;
 	static final TILES_WIDE:Int = 24;
@@ -274,7 +273,7 @@ class SlitherState extends GameState
 	{
 		if (sizeText == null)
 		{
-			sizeText = cast(addText("Parts: 0", 12, 2, FlxG.height - 16), FlxText);
+			sizeText = cast(addText("Parts: 0", 12, 2, FlxG.height - 16), MimeoText);
 		}
 
 		var length = parts.length;

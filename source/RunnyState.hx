@@ -78,11 +78,7 @@ class RunnyState extends GameState
 		player.solid = true;
 		add(player);
 
-		var monoChars:String = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890+-=/\\*:;()[]{}<>!?.,'\"&¡#%^~±`||$¢£™•¥@§©_";
-		var monoFont = FlxBitmapFont.fromMonospace("assets/fonts/mono.png", monoChars, FlxPoint.get(6, 9));
-
-		elapsedTimeText = new FlxBitmapText(monoFont);
-		elapsedTimeText.text = "";
+		elapsedTimeText = new MimeoText("");
 		elapsedTimeText.color = FlxColor.fromInt(0xff000000);
 		elapsedTimeText.useTextColor = true;
 		elapsedTimeText.textColor = FlxColor.fromInt(0xffffffff);

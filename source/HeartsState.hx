@@ -4,7 +4,6 @@ import InputManager.Action;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.text.FlxTypeText;
-import flixel.text.FlxText;
 import openfl.Assets;
 import openfl.utils.Assets;
 
@@ -24,7 +23,7 @@ class HeartsState extends GameState
 	var lines:Array<String>;
 	var currentLine = 0;
 	var characterPortrait:FlxSprite;
-	var currentlySpeakingText:FlxText;
+	var currentlySpeakingText:MimeoText;
 
 	final PORTRAIT_SIZE = 16;
 

@@ -41,9 +41,11 @@ class MenuState extends BaseState
 
 		add(new FlxSprite(0, 0).makeGraphic(FlxG.width, FlxG.height, Color.BLUE));
 
-		addText("Mimeo", 24).screenCenter(FlxAxes.X);
+		var title = addText("MIMEO");
+		title.setPosition(0, 16);
+		title.screenCenter(FlxAxes.X);
 
-		addText("Select a game", 12, 0, FlxG.height - 12 - 20).screenCenter(FlxAxes.X);
+		addText("Select a game", 12, 0, FlxG.height - 28).screenCenter(FlxAxes.X);
 
 		for (game in games)
 		{

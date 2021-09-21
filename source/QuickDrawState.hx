@@ -3,7 +3,6 @@ package;
 import InputManager.Action;
 import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.text.FlxText;
 import flixel.util.FlxAxes;
 import flixel.util.FlxTimer;
 
@@ -43,11 +42,11 @@ class QuickDrawState extends GameState
 	var upArrow:FlxSprite;
 	var rightArrow:FlxSprite;
 	var drawing:Bool = false;
-	var resultsText:FlxText;
+	var resultsText:MimeoText;
 	var playerWins:Int = 0;
 	var cpuWins:Int = 0;
 	var drawCount:Int = 0;
-	var scoresText:FlxText;
+	var scoresText:MimeoText;
 
 	final PADDING = 2;
 
@@ -94,7 +93,6 @@ class QuickDrawState extends GameState
 
 		resultsText = addText('', 12, -1000, -1000);
 		resultsText.visible = false;
-		resultsText.alignment = FlxTextAlign.RIGHT;
 
 		scoresText = addText(scoresString(), 12, PADDING);
 		scoresText.y = FlxG.height - scoresText.height - (PADDING * 8);

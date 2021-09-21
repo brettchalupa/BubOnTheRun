@@ -10,7 +10,12 @@ class Main extends Sprite
 	public function new()
 	{
 		super();
+
+		#if debug
+		addChild(new FlxGame(240, 135, RunnyState, 1, 60, 60, true, false));
+		#else
 		addChild(new FlxGame(240, 135, MenuState, 1, 60, 60, true, false));
+		#end
 
 		if (FlxG.mouse != null)
 		{

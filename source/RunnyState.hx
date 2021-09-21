@@ -28,6 +28,13 @@ class RunnyState extends GameState
 	var isGameOver:Bool = false;
 	var totalElapsedTime:Float;
 
+	final MAX_VEL_X = 120;
+	final MAX_VEL_Y = 800;
+	final ACCEL_X = 160;
+	final ACCEL_Y = 900;
+	final JUMP_VEL_Y = -140;
+	final JUMP_VEL_X = 160;
+
 	override public function create()
 	{
 		super.create();
@@ -58,16 +65,25 @@ class RunnyState extends GameState
 		player.animation.add("walk", [2, 3], 5, true);
 		player.animation.add("jump", [4]);
 		player.animation.add("wall", [5]);
-		player.acceleration.set(160, 900);
-		player.maxVelocity.set(120, 600);
+		player.acceleration.set(ACCEL_X, ACCEL_Y);
+		player.maxVelocity.set(MAX_VEL_X, MAX_VEL_Y);
 		player.setSize(12, 9);
 		player.offset.set(2, 7);
 		player.solid = true;
 		add(player);
 
-		FlxG.worldBounds.set(0, 0, 10000000, FlxG.height * 2);
+		#if debug
+		FlxG.debugger.drawDebug;
+		FlxG.log.redirectTraces = true;
+		FlxG.watch.add(player, "acceleration");
+		FlxG.watch.add(player, "velocity");
+		FlxG.watch.add(player, "x");
+		FlxG.watch.add(player, "y");
+		#end
 
-		FlxG.camera.follow(player, FlxCameraFollowStyle.PLATFORMER);
+		FlxG.worldBounds.set(0, 0, 100000000, FlxG.height * 2);
+
+		FlxG.camera.follow(player, FlxCameraFollowStyle.TOPDOWN);
 	}
 
 	override public function update(elapsed:Float)
@@ -145,7 +161,10 @@ class RunnyState extends GameState
 			jumping = false;
 
 		if (player.isTouching(FlxObject.DOWN) && !jumping)
+		{
 			jumpTimer = 0;
+			player.maxVelocity.x = MAX_VEL_X;
+		}
 
 		if (jumpTimer >= 0 && jumpPressed)
 		{
@@ -160,6 +179,10 @@ class RunnyState extends GameState
 		}
 
 		if (jumpTimer > 0 && jumpTimer < 0.25)
-			player.velocity.y = -200;
+		{
+			player.maxVelocity.x = JUMP_VEL_X;
+			player.velocity.x = JUMP_VEL_X;
+			player.velocity.y = JUMP_VEL_Y;
+		}
 	}
 }

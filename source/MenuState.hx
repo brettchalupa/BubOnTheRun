@@ -58,6 +58,8 @@ class MenuState extends BaseState
 		add(new FlxSprite(0, 0).makeGraphic(FlxG.width, FlxG.height, Color.BLUE));
 
 		var title = addText("MIMEO");
+		title.scale.set(2, 2);
+		title.updateHitbox();
 		title.setPosition(0, 16);
 		title.screenCenter(FlxAxes.X);
 

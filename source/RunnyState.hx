@@ -53,9 +53,15 @@ class RunnyState extends GameState
 		grounds.add(ground4);
 		add(grounds);
 
-		player = new FlxSprite(10, FlxG.height - 30).makeGraphic(4, 10, Color.WHITE);
+		player = new FlxSprite(10, FlxG.height - 30);
+		player.loadGraphic("assets/images/runny/player.png", true, 16, 16);
+		player.animation.add("walk", [2, 3], 5, true);
+		player.animation.add("jump", [4]);
+		player.animation.add("wall", [5]);
 		player.acceleration.set(100, 900);
 		player.maxVelocity.set(200, 400);
+		player.setSize(12, 9);
+		player.offset.set(2, 7);
 		player.solid = true;
 		add(player);
 
@@ -93,6 +99,31 @@ class RunnyState extends GameState
 					positionGround(ground);
 				}
 			}
+		}
+
+		animatePlayer();
+	}
+
+	function animatePlayer()
+	{
+		if (player.isTouching(FlxObject.WALL))
+		{
+			player.animation.play("wall");
+		}
+		else if (player.isTouching(FlxObject.FLOOR))
+		{
+			if (player.velocity.x == 0)
+			{
+				player.animation.play("idle");
+			}
+			else
+			{
+				player.animation.play("walk");
+			}
+		}
+		else
+		{
+			player.animation.play("jump");
 		}
 	}
 

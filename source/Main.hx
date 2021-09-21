@@ -19,7 +19,5 @@ class Main extends Sprite
 		{
 			FlxG.mouse.visible = false;
 		}
-
-		FlxAssets.FONT_DEFAULT = "Fairfax";
 	}
 }

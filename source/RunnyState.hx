@@ -5,8 +5,10 @@ import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
+import flixel.graphics.frames.FlxBitmapFont;
 import flixel.group.FlxGroup;
-import flixel.text.FlxText;
+import flixel.math.FlxPoint;
+import flixel.text.FlxBitmapText;
 import flixel.util.FlxColor;
 import flixel.util.FlxSort;
 
@@ -30,7 +32,7 @@ class RunnyState extends GameState
 	var grounds:FlxTypedGroup<FlxSprite>;
 	var isGameOver:Bool = false;
 	var totalElapsedTime:Float = 0.0;
-	var elapsedTimeText:FlxText;
+	var elapsedTimeText:FlxBitmapText;
 
 	final MAX_VEL_X = 120;
 	final MAX_VEL_Y = 800;
@@ -76,12 +78,19 @@ class RunnyState extends GameState
 		player.solid = true;
 		add(player);
 
-		elapsedTimeText = new FlxText(4, 4, 0, "", 12);
-		elapsedTimeText.color = Color.BLACK;
-		elapsedTimeText.setBorderStyle(OUTLINE, Color.WHITE, 1);
+		var monoChars:String = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890+-=/\\*:;()[]{}<>!?.,'\"&¡#%^~±`||$¢£™•¥@§©_";
+		var monoFont = FlxBitmapFont.fromMonospace("assets/fonts/mono.png", monoChars, FlxPoint.get(6, 9));
+
+		elapsedTimeText = new FlxBitmapText(monoFont);
+		elapsedTimeText.text = "";
+		elapsedTimeText.color = FlxColor.fromInt(0xff000000);
+		elapsedTimeText.useTextColor = true;
+		elapsedTimeText.textColor = FlxColor.fromInt(0xffffffff);
+		elapsedTimeText.setPosition(4, 4);
 		elapsedTimeText.scrollFactor.set(0, 0);
-		updateTotalElapsedTime(0.0);
 		add(elapsedTimeText);
+
+		updateTotalElapsedTime(0.0);
 
 		#if debug
 		FlxG.debugger.drawDebug;

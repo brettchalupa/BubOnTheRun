@@ -148,6 +148,8 @@ class RunnyState extends GameState
 
 		add(player);
 
+		FlxG.sound.playMusic("assets/music/botr.ogg", 0.5, true);
+
 		#if debug
 		FlxG.debugger.drawDebug;
 		FlxG.log.redirectTraces = true;

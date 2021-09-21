@@ -23,7 +23,7 @@ class MenuState extends BaseState
 		new BulletHeckState()
 	];
 
-	override public function new(initialGameType:GameType = SPACEVANIA)
+	override public function new(initialGameType:GameType = RUNNY)
 	{
 		for (game in games)
 		{

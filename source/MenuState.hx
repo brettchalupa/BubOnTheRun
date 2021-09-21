@@ -27,7 +27,6 @@ class MenuState extends BaseState
 	#else
 	var games:Array<GameState> = [
 		new SlitherState(),
-		new DogfightState(),
 		new QuickDrawState(),
 		new HeartsState(),
 		new RunnyState(),

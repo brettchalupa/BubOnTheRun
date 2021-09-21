@@ -6,8 +6,11 @@ import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup;
+import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import flixel.util.FlxSort;
+
+using StringTools;
 
 class RunnyState extends GameState
 {
@@ -26,7 +29,8 @@ class RunnyState extends GameState
 	var jumping:Bool = false;
 	var grounds:FlxTypedGroup<FlxSprite>;
 	var isGameOver:Bool = false;
-	var totalElapsedTime:Float;
+	var totalElapsedTime:Float = 0.0;
+	var elapsedTimeText:FlxText;
 
 	final MAX_VEL_X = 120;
 	final MAX_VEL_Y = 800;
@@ -72,6 +76,13 @@ class RunnyState extends GameState
 		player.solid = true;
 		add(player);
 
+		elapsedTimeText = new FlxText(4, 4, 0, "", 14);
+		elapsedTimeText.color = Color.BLACK;
+		elapsedTimeText.setBorderStyle(OUTLINE, Color.WHITE, 1);
+		elapsedTimeText.scrollFactor.set(0, 0);
+		updateTotalElapsedTime(0.0);
+		add(elapsedTimeText);
+
 		#if debug
 		FlxG.debugger.drawDebug;
 		FlxG.log.redirectTraces = true;
@@ -82,7 +93,6 @@ class RunnyState extends GameState
 		#end
 
 		FlxG.worldBounds.set(0, 0, 100000000, FlxG.height * 2);
-
 		FlxG.camera.follow(player, FlxCameraFollowStyle.TOPDOWN);
 	}
 
@@ -115,9 +125,20 @@ class RunnyState extends GameState
 					positionGround(ground);
 				}
 			}
+
+			updateTotalElapsedTime(elapsed);
 		}
 
 		animatePlayer();
+	}
+
+	function updateTotalElapsedTime(elapsed:Float)
+	{
+		totalElapsedTime += elapsed;
+		#if debug
+		FlxG.watch.addQuick('total elapsed time', totalElapsedTime);
+		#end
+		elapsedTimeText.text = Std.string(Std.int(totalElapsedTime)).lpad("0", 3) + "s";
 	}
 
 	function animatePlayer()

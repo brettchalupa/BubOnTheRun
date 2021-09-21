@@ -76,7 +76,7 @@ class RunnyState extends GameState
 		player.solid = true;
 		add(player);
 
-		elapsedTimeText = new FlxText(4, 4, 0, "", 14);
+		elapsedTimeText = new FlxText(4, 4, 0, "", 12);
 		elapsedTimeText.color = Color.BLACK;
 		elapsedTimeText.setBorderStyle(OUTLINE, Color.WHITE, 1);
 		elapsedTimeText.scrollFactor.set(0, 0);

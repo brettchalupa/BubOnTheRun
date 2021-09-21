@@ -239,7 +239,7 @@ class SlitherState extends GameState
 	function doEatApple(player:FlxSprite, apple:FlxSprite)
 	{
 		apple.kill();
-		FlxG.sound.play("assets/sounds/click.wav");
+		FlxG.sound.play("assets/sounds/click.ogg");
 		generatePart();
 		new FlxTimer().start(0.25, spawnApple, 1);
 	}

@@ -38,6 +38,7 @@ class MenuState extends BaseState
 		super.create();
 
 		FlxG.sound.pause();
+		FlxG.sound.music.stop();
 
 		add(new FlxSprite(0, 0).makeGraphic(FlxG.width, FlxG.height, Color.BLUE));
 
@@ -75,7 +76,7 @@ class MenuState extends BaseState
 				index = games.length - 1;
 			}
 			selectedGame = games[index];
-			FlxG.sound.play("assets/sounds/click.wav");
+			FlxG.sound.play("assets/sounds/click.ogg");
 
 			positionGames();
 		}
@@ -89,7 +90,7 @@ class MenuState extends BaseState
 				index = 0;
 			}
 			selectedGame = games[index];
-			FlxG.sound.play("assets/sounds/click.wav");
+			FlxG.sound.play("assets/sounds/click.ogg");
 			positionGames();
 		}
 

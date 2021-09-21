@@ -86,7 +86,7 @@ class Player extends FlxSprite
 		if (input.pressed(Action.CONFIRM) && timeSinceLastShot >= SHOT_COOLDOWN)
 		{
 			timeSinceLastShot = 0.0;
-			FlxG.sound.play("assets/sounds/click.wav");
+			FlxG.sound.play("assets/sounds/click.ogg");
 			fireBullet();
 		}
 		else

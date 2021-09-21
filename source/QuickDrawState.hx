@@ -123,7 +123,7 @@ class QuickDrawState extends GameState
 	{
 		drawing = true;
 		resultsText.visible = false;
-		FlxG.sound.play("assets/sounds/click.wav");
+		FlxG.sound.play("assets/sounds/click.ogg");
 
 		switch (drawType)
 		{

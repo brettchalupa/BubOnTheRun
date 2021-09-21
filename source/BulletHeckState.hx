@@ -170,7 +170,7 @@ class BulletHeckState extends GameState
 		bullet.y = player.y - bullet.height;
 		bullet.velocity.y = -100;
 		add(bullet);
-		FlxG.sound.play("assets/sounds/click.wav");
+		FlxG.sound.play("assets/sounds/click.ogg");
 		return bullet;
 	}
 

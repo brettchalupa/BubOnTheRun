@@ -43,6 +43,8 @@ class RunnyState extends GameState
 	final JUMP_VEL_X = 160;
 	final GROUND_HEIGHT = 200;
 
+	final GROUND_COLORS = [Color.LIGHT_BLUE, Color.GREEN, Color.ORANGE, Color.PINK, Color.YELLOW];
+
 	override public function create()
 	{
 		super.create();
@@ -50,16 +52,12 @@ class RunnyState extends GameState
 		FlxG.cameras.bgColor = Color.BLACK;
 
 		add(new FlxBackdrop("assets/images/runny/bg.png"));
-
 		var ground = new FlxSprite(0, FlxG.height - 10).makeGraphic(randomGroundWidth(), GROUND_HEIGHT, Color.PINK);
 		ground.immovable = true;
-
 		var ground2 = new FlxSprite(ground.x + ground.width + 20, ground.y).makeGraphic(randomGroundWidth(), GROUND_HEIGHT, Color.GREEN);
 		ground2.immovable = true;
-
 		var ground3 = new FlxSprite(ground2.x + ground2.width + 10, ground.y).makeGraphic(randomGroundWidth(), GROUND_HEIGHT, Color.ORANGE);
 		ground3.immovable = true;
-
 		var ground4 = new FlxSprite(ground3.x + ground3.width + 40, ground.y).makeGraphic(randomGroundWidth(), GROUND_HEIGHT, Color.YELLOW);
 		ground4.immovable = true;
 
@@ -111,11 +109,6 @@ class RunnyState extends GameState
 
 		FlxG.worldBounds.set(0, 0, 100000000, FlxG.height * 2);
 		FlxG.camera.follow(player, FlxCameraFollowStyle.PLATFORMER, 1);
-	}
-
-	function randomGroundWidth():Int
-	{
-		return FlxG.random.int(Std.int(FlxG.width / 3), Std.int(FlxG.width * 0.75));
 	}
 
 	override public function update(elapsed:Float)
@@ -193,8 +186,16 @@ class RunnyState extends GameState
 			return FlxSort.byValues(order, obj1.x, obj2.x);
 		}, FlxSort.ASCENDING);
 		var lastGround = grounds.members[grounds.length - 1];
+		ground.setGraphicSize(randomGroundWidth(), GROUND_HEIGHT);
+		ground.updateHitbox();
+		ground.color = GROUND_COLORS[FlxG.random.int(0, GROUND_COLORS.length - 1)];
 		ground.x = lastGround.x + lastGround.width + FlxG.random.int(20, 80);
 		ground.y = lastGround.y - FlxG.random.int(-30, 30);
+	}
+
+	function randomGroundWidth():Int
+	{
+		return FlxG.random.int(Std.int(FlxG.width / 3), Std.int(FlxG.width * 0.75));
 	}
 
 	function handleJump(elapsed:Float)

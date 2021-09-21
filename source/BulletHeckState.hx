@@ -36,17 +36,20 @@ class BulletHeckState extends GameState
 		add(player);
 
 		bullets = new FlxTypedGroup<FlxSprite>();
+		add(bullets);
 		enemies = new FlxTypedGroup<FlxSprite>();
-
-		spawnEnemies();
-		spawnEnemies();
-		spawnEnemies();
-		spawnEnemies();
-		spawnEnemies();
-
 		add(enemies);
 
-		scoreText = addText('Score: 000000', 12, 6, 6);
+		spawnEnemies();
+		spawnEnemies();
+		spawnEnemies();
+		spawnEnemies();
+		spawnEnemies();
+
+		var scoreBg = new FlxSprite(0, 0);
+		scoreBg.makeGraphic(FlxG.width, 4 + 9, Color.WHITE);
+		add(scoreBg);
+		scoreText = addText('Score: 000000', 12, 3, 3);
 		scoreText.alignment = "right";
 		scoreText.x = FlxG.width - scoreText.width - 12;
 		updateScore(0);
@@ -169,7 +172,6 @@ class BulletHeckState extends GameState
 		bullet.x = player.x + player.width / 2 - bullet.width / 2;
 		bullet.y = player.y - bullet.height;
 		bullet.velocity.y = -100;
-		add(bullet);
 		FlxG.sound.play("assets/sounds/click.ogg");
 		return bullet;
 	}

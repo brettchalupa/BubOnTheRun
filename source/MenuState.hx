@@ -11,6 +11,8 @@ import flixel.util.FlxAxes;
 class MenuState extends BaseState
 {
 	var selectedGame:GameState;
+
+	#if debug
 	var games:Array<GameState> = [
 		new GbloxState(),
 		new SlitherState(),
@@ -22,6 +24,17 @@ class MenuState extends BaseState
 		new SpacevaniaState(),
 		new BulletHeckState()
 	];
+	#else
+	var games:Array<GameState> = [
+		new SlitherState(),
+		new DogfightState(),
+		new QuickDrawState(),
+		new HeartsState(),
+		new RunnyState(),
+		new SpacevaniaState(),
+		new BulletHeckState()
+	];
+	#end
 
 	override public function new(initialGameType:GameType = RUNNY)
 	{

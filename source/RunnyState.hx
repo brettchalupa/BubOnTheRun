@@ -131,7 +131,7 @@ class RunnyState extends GameState
 		startHud.add(premiseText);
 		var startText = new MimeoText("tap to start");
 		startText.screenCenter();
-		startText.y = player.y + player.height + 12;
+		startText.y = player.y + player.height + 24;
 		startText.flicker(0, 0.5);
 		startHud.add(startText);
 		var highScoreText = new MimeoText('high-score: $highScore' + 's');

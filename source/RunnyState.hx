@@ -11,6 +11,7 @@ import flixel.group.FlxGroup;
 import flixel.math.FlxPoint;
 import flixel.text.FlxBitmapText;
 import flixel.util.FlxColor;
+import flixel.util.FlxSave;
 import flixel.util.FlxSort;
 
 using StringTools;
@@ -37,6 +38,8 @@ class RunnyState extends GameState
 	var elapsedTimeText:FlxBitmapText;
 	var startHud:FlxTypedGroup<FlxSprite>;
 	var hud:FlxTypedGroup<FlxSprite>;
+	var save:FlxSave;
+	var highScore:Float = 0;
 
 	final MAX_VEL_X = 140;
 	final MAX_VEL_Y = 800;
@@ -45,12 +48,19 @@ class RunnyState extends GameState
 	final JUMP_VEL_Y = -140;
 	final JUMP_VEL_X = 160;
 	final GROUND_HEIGHT = 200;
-
 	final GROUND_COLORS = [Color.LIGHT_BLUE, Color.GREEN, Color.ORANGE, Color.PINK, Color.YELLOW];
 
 	override public function create()
 	{
 		super.create();
+
+		save = new FlxSave();
+		save.bind("runny");
+
+		if (save.data.highScore != null)
+		{
+			highScore = Std.int(save.data.highScore);
+		}
 
 		FlxG.cameras.bgColor = Color.BLACK;
 
@@ -113,17 +123,21 @@ class RunnyState extends GameState
 		startHud.add(startBg);
 		var titleText = new MimeoText("BUB ON THE RUN");
 		titleText.screenCenter();
-		titleText.y -= 32;
+		titleText.y = 16;
 		startHud.add(titleText);
 		var premiseText = new MimeoText("outrun ur inner-demons");
 		premiseText.screenCenter();
-		premiseText.y += 16;
+		premiseText.y = titleText.y + titleText.height + 4;
 		startHud.add(premiseText);
 		var startText = new MimeoText("tap to start");
 		startText.screenCenter();
-		startText.y = premiseText.y + 24;
+		startText.y = player.y + player.height + 12;
 		startText.flicker(0, 0.5);
 		startHud.add(startText);
+		var highScoreText = new MimeoText('high-score: $highScore' + 's');
+		highScoreText.screenCenter();
+		highScoreText.y = startText.y + startText.height + 12;
+		startHud.add(highScoreText);
 		for (item in startHud)
 		{
 			item.scrollFactor.set(0, 0);
@@ -163,6 +177,11 @@ class RunnyState extends GameState
 					{
 						FlxG.camera.fade(Color.BLACK, 1, false, function()
 						{
+							if (Std.int(totalElapsedTime) > highScore)
+							{
+								save.data.highScore = totalElapsedTime;
+								save.flush();
+							}
 							FlxG.resetState();
 						});
 					});
@@ -177,9 +196,9 @@ class RunnyState extends GameState
 				}
 
 				updateTotalElapsedTime(elapsed);
-			}
 
-			animatePlayer();
+				animatePlayer();
+			}
 		}
 		else
 		{

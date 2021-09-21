@@ -11,11 +11,7 @@ class Main extends Sprite
 	{
 		super();
 
-		#if debug
-		addChild(new FlxGame(240, 135, RunnyState, 1, 60, 60, true, false));
-		#else
 		addChild(new FlxGame(240, 135, MenuState, 1, 60, 60, true, false));
-		#end
 
 		FlxG.sound.volume = 0.5;
 

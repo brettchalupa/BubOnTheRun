@@ -3,9 +3,9 @@ package;
 import InputManager.Action;
 import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.addons.text.FlxTypeText;
-import openfl.Assets;
 import openfl.utils.Assets;
+
+using StringTools;
 
 class HeartsState extends GameState
 {
@@ -19,11 +19,11 @@ class HeartsState extends GameState
 		return GameType.HEARTS;
 	}
 
-	var typeText:FlxTypeText;
 	var lines:Array<String>;
-	var currentLine = 0;
+	var currentLineIndex:Int = 0;
 	var characterPortrait:FlxSprite;
 	var currentlySpeakingText:MimeoText;
+	var dialogueText:MimeoText;
 
 	final PORTRAIT_SIZE = 16;
 
@@ -31,32 +31,35 @@ class HeartsState extends GameState
 	{
 		super.create();
 
-		addText("Hearts");
+		var title = addText("Cutscene Prototype");
+		title.setPosition(4, 4);
 
-		FlxG.cameras.bgColor = 0xff131c1b;
+		FlxG.cameras.bgColor = Color.WHITE;
 
 		var scene1 = Assets.getText("assets/data/hearts/scene1.txt");
 		lines = scene1.split("\n");
 
-		typeText = new FlxTypeText(8, FlxG.height - 48, FlxG.width - 30, "", 12);
+		var dialogueBg = new FlxSprite(0, 0);
+		dialogueBg.makeGraphic(FlxG.width - 12, 26, Color.LIGHT_BLUE);
+		dialogueBg.screenCenter();
+		dialogueBg.y = FlxG.height - dialogueBg.height - 4;
+		add(dialogueBg);
+		dialogueText = new MimeoText("Hi!");
+		dialogueText.autoSize = false;
+		dialogueText.setPosition(dialogueBg.x + 4, dialogueBg.y + 4);
+		dialogueText.wordWrap = true;
+		dialogueText.lineSpacing = 1;
+		dialogueText.fieldWidth = Std.int(dialogueBg.width - 4);
+		add(dialogueText);
 
-		typeText.delay = 0.1;
-		typeText.eraseDelay = 0.2;
-		typeText.showCursor = false;
-		typeText.autoErase = true;
-		typeText.waitTime = 2.0;
-		typeText.setTypingVariation(0.75, true);
-		typeText.color = Color.WHITE;
-		typeText.useDefaultSound = true;
-		typeText.paused = true;
-		add(typeText);
-
-		currentlySpeakingText = addText("", 12, typeText.x, typeText.y - 12, Color.BLUE);
+		currentlySpeakingText = addText("", 12, dialogueBg.x + 4, dialogueBg.y - 10, Color.BLUE);
 		currentlySpeakingText.visible = false;
 
-		characterPortrait = new FlxSprite(typeText.x + typeText.width - PORTRAIT_SIZE, typeText.y - PORTRAIT_SIZE);
+		characterPortrait = new FlxSprite(dialogueBg.x + dialogueBg.width - PORTRAIT_SIZE - 4, dialogueBg.y - PORTRAIT_SIZE);
 		characterPortrait.visible = false;
 		add(characterPortrait);
+
+		renderNextLine();
 	}
 
 	override public function update(elapsed:Float)
@@ -65,55 +68,44 @@ class HeartsState extends GameState
 
 		if (input.justPressed(Action.CONFIRM))
 		{
-			if (typeText.paused)
-			{
-				var currentLine = lines[currentLine];
-				var split = currentLine.split(":");
-				var character:String = null;
-				var text;
-				if (split.length > 1)
-				{
-					character = split[0];
-					text = split.slice(1, split.length).join(":");
-				}
-				else
-				{
-					text = split[0];
-				}
-
-				typeText.resetText(text);
-				if (character != null)
-				{
-					currentlySpeakingText.text = character;
-					currentlySpeakingText.visible = true;
-					characterPortrait.loadGraphic('assets/images/hearts/$character.png');
-					characterPortrait.visible = true;
-				}
-				else
-				{
-					characterPortrait.visible = false;
-					currentlySpeakingText.visible = false;
-				}
-
-				startText();
-			}
-			else
-			{
-				typeText.skip();
-			}
+			renderNextLine();
 		}
 	}
 
-	function startText()
+	function renderNextLine()
 	{
-		typeText.start(0.02, false, false, [], function()
+		var line = lines[currentLineIndex];
+		var split = line.split(":");
+		var character:String = null;
+		var text;
+		if (split.length > 1)
 		{
-			currentLine++;
-			if (currentLine >= lines.length)
-			{
-				currentLine = 0;
-			}
-			typeText.paused = true;
-		});
+			character = split[0];
+			text = split.slice(1, split.length).join(":");
+		}
+		else
+		{
+			text = split[0];
+		}
+
+		dialogueText.text = text.trim();
+		if (character != null)
+		{
+			currentlySpeakingText.text = character;
+			currentlySpeakingText.visible = true;
+			characterPortrait.loadGraphic('assets/images/hearts/$character.png');
+			characterPortrait.visible = true;
+		}
+		else
+		{
+			characterPortrait.visible = false;
+			currentlySpeakingText.visible = false;
+		}
+
+		currentLineIndex++;
+		if (currentLineIndex >= lines.length)
+		{
+			currentLineIndex = 0;
+		}
 	}
 }

@@ -50,7 +50,7 @@ class SlitherState extends GameState
 	{
 		super.create();
 
-		// FlxG.sound.playMusic("assets/music/daphnedumpling.ogg", 0.8, true);
+		FlxG.camera.bgColor = Color.WHITE;
 
 		field = new FlxSprite(0, 0).makeGraphic(TILE_SIZE * TILES_WIDE, TILE_SIZE * TILES_HIGH, Color.GREEN);
 		field.screenCenter();
@@ -273,7 +273,7 @@ class SlitherState extends GameState
 	{
 		if (sizeText == null)
 		{
-			sizeText = cast(addText("Parts: 0", 12, 2, FlxG.height - 16), MimeoText);
+			sizeText = cast(addText("Parts: 0", 12, 2, FlxG.height - 9), MimeoText);
 		}
 
 		var length = parts.length;

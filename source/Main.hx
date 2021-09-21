@@ -17,6 +17,8 @@ class Main extends Sprite
 		addChild(new FlxGame(240, 135, MenuState, 1, 60, 60, true, false));
 		#end
 
+		FlxG.sound.volume = 0.5;
+
 		if (FlxG.mouse != null)
 		{
 			FlxG.mouse.visible = false;

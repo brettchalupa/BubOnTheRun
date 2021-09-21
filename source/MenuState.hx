@@ -38,7 +38,10 @@ class MenuState extends BaseState
 		super.create();
 
 		FlxG.sound.pause();
-		FlxG.sound.music.stop();
+		if (FlxG.sound.music != null)
+		{
+			FlxG.sound.music.stop();
+		}
 
 		add(new FlxSprite(0, 0).makeGraphic(FlxG.width, FlxG.height, Color.BLUE));
 

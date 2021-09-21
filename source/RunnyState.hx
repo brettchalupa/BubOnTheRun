@@ -175,6 +175,7 @@ class RunnyState extends GameState
 				if (player.y > (FlxG.height * 2))
 				{
 					isGameOver = true;
+					FlxG.sound.play("assets/sounds/death.ogg");
 					FlxG.camera.flash(Color.WHITE, 0.5, function()
 					{
 						FlxG.camera.fade(Color.BLACK, 1, false, function()
@@ -206,6 +207,7 @@ class RunnyState extends GameState
 		{
 			if (input.justPressed(CONFIRM))
 			{
+				FlxG.sound.play("assets/sounds/jump.ogg");
 				startHud.kill();
 				FlxG.camera.follow(player, FlxCameraFollowStyle.PLATFORMER, 1);
 				player.setPosition(10, FlxG.height - 70);
@@ -291,7 +293,7 @@ class RunnyState extends GameState
 		{
 			jumping = true;
 			if (jumpTimer == 0)
-				FlxG.sound.play("assets/sounds/click.wav");
+				FlxG.sound.play("assets/sounds/jump.ogg");
 			jumpTimer += elapsed;
 		}
 		else

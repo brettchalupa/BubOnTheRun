@@ -73,7 +73,8 @@ class MenuState extends BaseState
 				index = games.length - 1;
 			}
 			selectedGame = games[index];
-			FlxG.sound.play(AssetPaths.click__wav);
+			FlxG.sound.play("assets/sounds/click.wav");
+
 			positionGames();
 		}
 
@@ -86,7 +87,7 @@ class MenuState extends BaseState
 				index = 0;
 			}
 			selectedGame = games[index];
-			FlxG.sound.play(AssetPaths.click__wav);
+			FlxG.sound.play("assets/sounds/click.wav");
 			positionGames();
 		}
 

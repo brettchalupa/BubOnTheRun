@@ -191,7 +191,7 @@ class RunnyState extends GameState
 		{
 			jumping = true;
 			if (jumpTimer == 0)
-				FlxG.sound.play(AssetPaths.click__wav);
+				FlxG.sound.play("assets/sounds/click.wav");
 			jumpTimer += elapsed;
 		}
 		else

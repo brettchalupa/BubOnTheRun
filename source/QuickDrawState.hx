@@ -125,7 +125,8 @@ class QuickDrawState extends GameState
 	{
 		drawing = true;
 		resultsText.visible = false;
-		FlxG.sound.play(AssetPaths.click__wav);
+		FlxG.sound.play("assets/sounds/click.wav");
+
 		switch (drawType)
 		{
 			case ROCK:

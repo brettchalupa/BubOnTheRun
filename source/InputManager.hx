@@ -32,7 +32,16 @@ class InputManager
 
 	public function justReleased(action:Action):Bool
 	{
-		return FlxG.keys.anyJustReleased(keysForAction(action)) || justReleasedGamepad(action);
+		return justReleasedKey(action) || justReleasedGamepad(action) || justReleasedMouse(action);
+	}
+
+	private function justReleasedKey(action:Action):Bool
+	{
+		#if FLX_KEYBOARD
+		return FlxG.keys.anyJustReleased(keysForAction(action));
+		#else
+		return false;
+		#end
 	}
 
 	private function justReleasedGamepad(action:Action):Bool
@@ -47,9 +56,33 @@ class InputManager
 		#end
 	}
 
+	public function justReleasedMouse(action:Action):Bool
+	{
+		#if FLX_MOUSE
+		switch (action)
+		{
+			case CONFIRM:
+				return FlxG.mouse.justReleased;
+			default:
+				return false;
+		}
+		#else
+		return false;
+		#end
+	}
+
 	public function pressed(action:Action):Bool
 	{
-		return FlxG.keys.anyPressed(keysForAction(action)) || pressedGamepad(action);
+		return pressedKeyboard(action) || pressedGamepad(action) || pressedMouse(action);
+	}
+
+	private function pressedKeyboard(action:Action):Bool
+	{
+		#if FLX_KEYBOARD
+		return FlxG.keys.anyPressed(keysForAction(action));
+		#else
+		return false;
+		#end
 	}
 
 	private function pressedGamepad(action:Action):Bool
@@ -64,9 +97,33 @@ class InputManager
 		#end
 	}
 
+	public function pressedMouse(action:Action):Bool
+	{
+		#if FLX_MOUSE
+		switch (action)
+		{
+			case CONFIRM:
+				return FlxG.mouse.pressed;
+			default:
+				return false;
+		}
+		#else
+		return false;
+		#end
+	}
+
 	public function justPressed(action:Action):Bool
 	{
-		return FlxG.keys.anyJustPressed(keysForAction(action)) || justPressedGamepad(action);
+		return justPressedKey(action) || justPressedGamepad(action) || justPressedMouse(action);
+	}
+
+	private function justPressedKey(action:Action):Bool
+	{
+		#if FLX_KEYBOARD
+		return FlxG.keys.anyJustPressed(keysForAction(action));
+		#else
+		return false;
+		#end
 	}
 
 	private function justPressedGamepad(action:Action):Bool
@@ -76,6 +133,21 @@ class InputManager
 		if (gamepad == null)
 			return false;
 		return gamepad.anyJustPressed(buttonsForAction(action));
+		#else
+		return false;
+		#end
+	}
+
+	public function justPressedMouse(action):Bool
+	{
+		#if FLX_MOUSE
+		switch (action)
+		{
+			case CONFIRM:
+				return FlxG.mouse.justPressed;
+			default:
+				return false;
+		}
 		#else
 		return false;
 		#end

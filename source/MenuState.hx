@@ -20,7 +20,7 @@ class MenuState extends BaseState
 		new QuickDrawState(),
 		new RoyaltyState(),
 		new HeartsState(),
-		new RunnyState(),
+		new BubOnTheRunState(),
 		new SpacevaniaState(),
 		new BulletHeckState()
 	];
@@ -29,13 +29,13 @@ class MenuState extends BaseState
 		new SlitherState(),
 		new QuickDrawState(),
 		new HeartsState(),
-		new RunnyState(),
+		new BubOnTheRunState(),
 		new SpacevaniaState(),
 		new BulletHeckState()
 	];
 	#end
 
-	override public function new(initialGameType:GameType = RUNNY)
+	override public function new(initialGameType:GameType = BUB_ON_THE_RUN)
 	{
 		for (game in games)
 		{

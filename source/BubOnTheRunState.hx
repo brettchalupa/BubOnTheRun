@@ -17,16 +17,16 @@ import flixel.util.FlxSort;
 using StringTools;
 using flixel.util.FlxSpriteUtil;
 
-class RunnyState extends GameState
+class BubOnTheRunState extends GameState
 {
 	override function slug():String
 	{
-		return "runny";
+		return "bub-on-the-run";
 	}
 
 	override public function gameType():GameType
 	{
-		return GameType.RUNNY;
+		return GameType.BUB_ON_THE_RUN;
 	}
 
 	var player:FlxSprite;
@@ -56,7 +56,7 @@ class RunnyState extends GameState
 		super.create();
 
 		save = new FlxSave();
-		save.bind("runny");
+		save.bind("bub-on-the-run");
 
 		if (save.data.highScore != null)
 		{
@@ -65,7 +65,7 @@ class RunnyState extends GameState
 
 		FlxG.cameras.bgColor = Color.BLACK;
 
-		add(new FlxBackdrop("assets/images/runny/bg.png"));
+		add(new FlxBackdrop("assets/images/bub-on-the-run/bg.png"));
 
 		worldHeight = FlxG.height * 10;
 
@@ -87,7 +87,7 @@ class RunnyState extends GameState
 		grounds.kill();
 
 		player = new FlxSprite();
-		player.loadGraphic("assets/images/runny/player.png", true, 16, 16);
+		player.loadGraphic("assets/images/bub-on-the-run/player.png", true, 16, 16);
 		player.screenCenter();
 		player.animation.add("walk", [2, 3], 7, true);
 		player.animation.add("jump", [4]);

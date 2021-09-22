@@ -10,6 +10,8 @@ import flixel.graphics.frames.FlxBitmapFont;
 import flixel.group.FlxGroup;
 import flixel.math.FlxPoint;
 import flixel.text.FlxBitmapText;
+import flixel.text.FlxText;
+import flixel.util.FlxAxes;
 import flixel.util.FlxColor;
 import flixel.util.FlxSave;
 import flixel.util.FlxSort;
@@ -44,6 +46,13 @@ class BubOnTheRunState extends GameState
 	var highScore:Float = 0;
 	var worldHeight:Int;
 	var justTouchedWall:Bool = false;
+	var displayGameOver:Bool = false;
+	var startBg:FlxSprite;
+	var titleText:MimeoText;
+	var startText:MimeoText;
+	var premiseText:MimeoText;
+	var highScoreText:MimeoText;
+
 
 	final MAX_VEL_X = 140;
 	final MAX_VEL_Y = 800;
@@ -137,23 +146,23 @@ class BubOnTheRunState extends GameState
 		hud.kill();
 
 		startHud = new FlxTypedGroup<FlxSprite>();
-		var startBg = new FlxSprite();
+		startBg = new FlxSprite();
 		startBg.makeGraphic(FlxG.width, Std.int(FlxG.height), Color.WHITE);
 		startHud.add(startBg);
-		var titleText = new MimeoText("BUB ON THE RUN");
+		titleText = new MimeoText("BUB ON THE RUN");
 		titleText.screenCenter();
 		titleText.y = 16;
 		startHud.add(titleText);
-		var premiseText = new MimeoText("outrun ur inner-demons");
+		premiseText = new MimeoText("outrun ur inner-demons");
 		premiseText.screenCenter();
 		premiseText.y = titleText.y + titleText.height + 4;
 		startHud.add(premiseText);
-		var startText = new MimeoText("tap to start");
+		startText = new MimeoText("tap to start");
 		startText.screenCenter();
 		startText.y = player.y + player.height + 24;
 		startText.flicker(0, 0.5);
 		startHud.add(startText);
-		var highScoreText = new MimeoText('high-score: $highScore' + 's');
+		highScoreText = new MimeoText('high-score: $highScore' + 's');
 		highScoreText.screenCenter();
 		highScoreText.y = startText.y + startText.height + 12;
 		startHud.add(highScoreText);
@@ -201,17 +210,9 @@ class BubOnTheRunState extends GameState
 					new FlxTimer().start(0.33, function(_) {
 						FlxG.sound.play("assets/sounds/death.ogg");
 						player.animation.play("dead");
-						FlxG.camera.flash(Color.WHITE, 0.5, function()
+						FlxG.camera.flash(Color.WHITE, 1.2, function()
 						{
-							FlxG.camera.fade(Color.BLACK, 1, false, function()
-							{
-								if (Std.int(totalElapsedTime) > highScore)
-								{
-									save.data.highScore = totalElapsedTime;
-									save.flush();
-								}
-								FlxG.resetState();
-							});
+							handleGameOver();
 						});
 					}, 1);
 				}
@@ -233,6 +234,16 @@ class BubOnTheRunState extends GameState
 				updateTotalElapsedTime(elapsed);
 
 				animatePlayer();
+			}
+			else if (displayGameOver)
+			{
+				if (input.justPressed(CONFIRM))
+				{
+					FlxG.camera.fade(Color.BLACK, 1, false, function()
+					{
+						FlxG.resetState();
+					});
+				}
 			}
 		}
 		else
@@ -258,6 +269,50 @@ class BubOnTheRunState extends GameState
 				});
 			}
 		}
+	}
+
+	function handleGameOver()
+	{
+		displayGameOver = true;
+
+		grounds.kill();
+		startHud.revive();
+
+		player.velocity.set(0, 0);
+		player.acceleration.set(0, 0);
+		FlxG.camera.setPosition(0, 0);
+		FlxG.camera.color = FlxColor.TRANSPARENT;
+		player.screenCenter();
+
+		var newHighScore = false;
+		var newScore = Std.int(totalElapsedTime);
+
+		if (newScore > highScore)
+		{
+			newHighScore = true;
+			save.data.highScore = newScore;
+			save.flush();
+		}
+
+		titleText.screenCenter(FlxAxes.X);
+
+		if (newHighScore)
+			premiseText.text = "nice work\nur doin' better!";
+		else
+			premiseText.text = "keep on trying!!";
+
+		startText.text = "tap to restart";
+		startText.screenCenter();
+
+		premiseText.screenCenter();
+		premiseText.y = startText.y + startText.height + 8;
+
+		highScoreText.autoSize = false;
+		highScoreText.alignment = FlxTextAlign.CENTER;
+		if (newHighScore)
+			highScoreText.text = 'new high-score: $newScore' + "s\n" + 'previous high-score: $highScore' + 's';
+		else
+			highScoreText.text = 'ur score: $newScore' + "s\n" + 'high-score: $highScore' + "s\n";
 	}
 
 	function updateTotalElapsedTime(elapsed:Float)

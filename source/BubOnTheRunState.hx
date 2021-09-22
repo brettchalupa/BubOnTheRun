@@ -294,6 +294,7 @@ class BubOnTheRunState extends GameState
 			save.flush();
 		}
 
+		titleText.text = "GAME OVER";
 		titleText.screenCenter(FlxAxes.X);
 
 		if (newHighScore)

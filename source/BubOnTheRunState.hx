@@ -239,6 +239,7 @@ class BubOnTheRunState extends GameState
 			{
 				if (input.justPressed(CONFIRM))
 				{
+					FlxG.sound.play("assets/sounds/jump.ogg");
 					FlxG.camera.fade(Color.BLACK, 1, false, function()
 					{
 						FlxG.resetState();

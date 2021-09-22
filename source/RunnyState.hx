@@ -40,6 +40,7 @@ class RunnyState extends GameState
 	var hud:FlxTypedGroup<FlxSprite>;
 	var save:FlxSave;
 	var highScore:Float = 0;
+	var worldHeight:Int;
 
 	final MAX_VEL_X = 140;
 	final MAX_VEL_Y = 800;
@@ -66,7 +67,9 @@ class RunnyState extends GameState
 
 		add(new FlxBackdrop("assets/images/runny/bg.png"));
 
-		var ground = new FlxSprite(0, FlxG.height - 10).makeGraphic(randomGroundWidth(), GROUND_HEIGHT, Color.PINK);
+		worldHeight = FlxG.height * 10;
+
+		var ground = new FlxSprite(0, worldHeight / 2).makeGraphic(randomGroundWidth(), GROUND_HEIGHT, Color.PINK);
 		ground.immovable = true;
 		var ground2 = new FlxSprite(ground.x + ground.width + 20, ground.y).makeGraphic(randomGroundWidth(), GROUND_HEIGHT, Color.GREEN);
 		ground2.immovable = true;
@@ -172,7 +175,7 @@ class RunnyState extends GameState
 
 				handleJump(elapsed);
 
-				if (player.y > (FlxG.height * 2))
+				if (player.y > worldHeight)
 				{
 					isGameOver = true;
 					FlxG.sound.play("assets/sounds/death.ogg");
@@ -210,12 +213,12 @@ class RunnyState extends GameState
 				FlxG.sound.play("assets/sounds/jump.ogg");
 				startHud.kill();
 				FlxG.camera.follow(player, FlxCameraFollowStyle.PLATFORMER, 1);
-				player.setPosition(10, FlxG.height - 70);
+				player.setPosition(grounds.members[0].x + 40, grounds.members[0].y - 80);
 				player.visible = false;
 
 				FlxG.camera.flash(Color.WHITE, 1, function()
 				{
-					FlxG.worldBounds.set(0, 0, 100000000, FlxG.height * 2);
+					FlxG.worldBounds.set(0, 0, 100000000, worldHeight);
 					grounds.revive();
 					hud.revive();
 					player.active = true;
@@ -268,12 +271,25 @@ class RunnyState extends GameState
 		ground.updateHitbox();
 		ground.color = GROUND_COLORS[FlxG.random.int(0, GROUND_COLORS.length - 1)];
 		ground.x = lastGround.x + lastGround.width + FlxG.random.int(20, 80);
-		ground.y = lastGround.y - FlxG.random.int(-30, 30);
+		var newGroundY = lastGround.y - FlxG.random.int(-30, 30);
+
+		if (newGroundY > worldHeight - 60)
+		{
+			ground.y = lastGround.y - 30;
+		}
+		else if (newGroundY < 100)
+		{
+			ground.y = lastGround.y + 30;
+		}
+		else
+		{
+			ground.y = newGroundY;
+		}
 	}
 
 	function randomGroundWidth():Int
 	{
-		return FlxG.random.int(Std.int(FlxG.width / 3), Std.int(FlxG.width * 0.75));
+		return FlxG.random.int(Std.int(FlxG.width / 4), Std.int(FlxG.width * 0.75));
 	}
 
 	function handleJump(elapsed:Float)

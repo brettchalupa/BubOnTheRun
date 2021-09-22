@@ -267,9 +267,8 @@ class RunnyState extends GameState
 			return FlxSort.byValues(order, obj1.x, obj2.x);
 		}, FlxSort.ASCENDING);
 		var lastGround = grounds.members[grounds.length - 1];
-		ground.setGraphicSize(randomGroundWidth(), GROUND_HEIGHT);
+		ground.makeGraphic(randomGroundWidth(), GROUND_HEIGHT, GROUND_COLORS[FlxG.random.int(0, GROUND_COLORS.length - 1)]);
 		ground.updateHitbox();
-		ground.color = GROUND_COLORS[FlxG.random.int(0, GROUND_COLORS.length - 1)];
 		ground.x = lastGround.x + lastGround.width + FlxG.random.int(20, 80);
 		var newGroundY = lastGround.y - FlxG.random.int(-30, 30);
 

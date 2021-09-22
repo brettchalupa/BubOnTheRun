@@ -78,6 +78,7 @@ class BubOnTheRunState extends GameState
 		FlxG.cameras.bgColor = Color.BLACK;
 
 		add(new FlxBackdrop("assets/images/bub-on-the-run/bg.png"));
+		add(new FlxBackdrop("assets/images/bub-on-the-run/parallax-bg.png", 0.8, 0.8));
 
 		worldHeight = FlxG.height * 10;
 
@@ -205,8 +206,6 @@ class BubOnTheRunState extends GameState
 				if (player.y > worldHeight || player.isTouching(FlxObject.WALL))
 				{
 					isGameOver = true;
-					player.velocity.x = 0;
-					player.acceleration.x = 0;
 					new FlxTimer().start(0.33, function(_) {
 						FlxG.sound.play("assets/sounds/death.ogg");
 						player.animation.play("dead");
@@ -283,7 +282,7 @@ class BubOnTheRunState extends GameState
 		player.acceleration.set(0, 0);
 		FlxG.camera.setPosition(0, 0);
 		FlxG.camera.color = FlxColor.TRANSPARENT;
-		player.screenCenter();
+		player.setPosition(FlxG.camera.width / 2 - player.width / 2 + 16, FlxG.camera.height / 2 - player.height / 2 + 8);
 
 		var newHighScore = false;
 		var newScore = Std.int(totalElapsedTime);

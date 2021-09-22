@@ -13,6 +13,7 @@ import flixel.text.FlxBitmapText;
 import flixel.util.FlxColor;
 import flixel.util.FlxSave;
 import flixel.util.FlxSort;
+import flixel.util.FlxTimer;
 
 using StringTools;
 using flixel.util.FlxSpriteUtil;
@@ -92,6 +93,7 @@ class BubOnTheRunState extends GameState
 		player.animation.add("walk", [2, 3], 7, true);
 		player.animation.add("jump", [4]);
 		player.animation.add("wall", [5]);
+		player.animation.add("dead", [6]);
 		player.acceleration.set(ACCEL_X, ACCEL_Y);
 		player.maxVelocity.set(MAX_VEL_X, MAX_VEL_Y);
 		player.setSize(12, 9);
@@ -179,18 +181,20 @@ class BubOnTheRunState extends GameState
 				{
 					isGameOver = true;
 					FlxG.sound.play("assets/sounds/death.ogg");
-					FlxG.camera.flash(Color.WHITE, 0.5, function()
-					{
-						FlxG.camera.fade(Color.BLACK, 1, false, function()
+					new FlxTimer().start(0.5, function(_) {
+						FlxG.camera.flash(Color.WHITE, 0.5, function()
 						{
-							if (Std.int(totalElapsedTime) > highScore)
+							FlxG.camera.fade(Color.BLACK, 1, false, function()
 							{
-								save.data.highScore = totalElapsedTime;
-								save.flush();
-							}
-							FlxG.resetState();
+								if (Std.int(totalElapsedTime) > highScore)
+								{
+									save.data.highScore = totalElapsedTime;
+									save.flush();
+								}
+								FlxG.resetState();
+							});
 						});
-					});
+					}, 1);
 				}
 
 				for (ground in grounds)
@@ -239,7 +243,11 @@ class BubOnTheRunState extends GameState
 
 	function animatePlayer()
 	{
-		if (player.isTouching(FlxObject.WALL))
+		if (isGameOver)
+		{
+			player.animation.play("dead");
+		}
+		else if (player.isTouching(FlxObject.WALL))
 		{
 			player.animation.play("wall");
 		}

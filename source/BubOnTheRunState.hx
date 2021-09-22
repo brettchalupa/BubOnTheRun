@@ -34,6 +34,7 @@ class BubOnTheRunState extends GameState
 	var jumpTimer:Float = 0;
 	var jumping:Bool = false;
 	var grounds:FlxTypedGroup<FlxSprite>;
+	var obstacles:FlxTypedGroup<FlxSprite>;
 	var isGameOver:Bool = false;
 	var totalElapsedTime:Float = 0.0;
 	var elapsedTimeText:FlxBitmapText;
@@ -71,7 +72,7 @@ class BubOnTheRunState extends GameState
 
 		worldHeight = FlxG.height * 10;
 
-		var ground = new FlxSprite(0, worldHeight / 2).makeGraphic(randomGroundWidth(), GROUND_HEIGHT, Color.PINK);
+		var ground = new FlxSprite(0, worldHeight / 2).makeGraphic(Std.int(FlxG.width * 1.2), GROUND_HEIGHT, Color.PINK);
 		ground.immovable = true;
 		var ground2 = new FlxSprite(ground.x + ground.width + 20, ground.y).makeGraphic(randomGroundWidth(), GROUND_HEIGHT, Color.GREEN);
 		ground2.immovable = true;
@@ -88,6 +89,18 @@ class BubOnTheRunState extends GameState
 		add(grounds);
 		grounds.kill();
 
+		var obstacleSize = 10;
+		obstacles = new FlxTypedGroup<FlxSprite>(obstacleSize);
+		for (i in 0...obstacleSize)
+		{
+			var obstacle = new FlxSprite();
+			obstacle.kill();
+			obstacle.solid = true;
+			obstacle.immovable = true;
+			obstacles.add(obstacle);
+		}
+		add(obstacles);
+
 		player = new FlxSprite();
 		player.loadGraphic("assets/images/bub-on-the-run/player.png", true, 16, 16);
 		player.screenCenter();
@@ -97,8 +110,8 @@ class BubOnTheRunState extends GameState
 		player.animation.add("dead", [6]);
 		player.acceleration.set(ACCEL_X, ACCEL_Y);
 		player.maxVelocity.set(MAX_VEL_X, MAX_VEL_Y);
-		player.setSize(12, 9);
-		player.offset.set(2, 7);
+		player.setSize(8, 9);
+		player.offset.set(4, 7);
 		player.solid = true;
 		player.active = false;
 
@@ -172,17 +185,22 @@ class BubOnTheRunState extends GameState
 
 		if (player.active)
 		{
+			FlxG.collide(grounds, player);
+			FlxG.collide(obstacles, player);
+			FlxG.collide(obstacles, grounds);
+
 			if (!isGameOver)
 			{
-				FlxG.collide(grounds, player);
-
 				handleJump(elapsed);
 
-				if (player.y > worldHeight)
+				if (player.y > worldHeight || player.isTouching(FlxObject.WALL))
 				{
 					isGameOver = true;
-					FlxG.sound.play("assets/sounds/death.ogg");
-					new FlxTimer().start(0.5, function(_) {
+					player.velocity.x = 0;
+					player.acceleration.x = 0;
+					new FlxTimer().start(0.33, function(_) {
+						FlxG.sound.play("assets/sounds/death.ogg");
+						player.animation.play("dead");
 						FlxG.camera.flash(Color.WHITE, 0.5, function()
 						{
 							FlxG.camera.fade(Color.BLACK, 1, false, function()
@@ -204,6 +222,12 @@ class BubOnTheRunState extends GameState
 					{
 						positionGround(ground);
 					}
+				}
+
+				for (obstacle in obstacles)
+				{
+					if ((obstacle.x + obstacle.width < player.x) && !obstacle.isOnScreen(FlxG.camera))
+						obstacle.kill();
 				}
 
 				updateTotalElapsedTime(elapsed);
@@ -244,11 +268,7 @@ class BubOnTheRunState extends GameState
 
 	function animatePlayer()
 	{
-		if (isGameOver)
-		{
-			player.animation.play("dead");
-		}
-		else if (player.isTouching(FlxObject.WALL))
+		if (player.isTouching(FlxObject.WALL))
 		{
 			player.animation.play("wall");
 
@@ -286,7 +306,7 @@ class BubOnTheRunState extends GameState
 			return FlxSort.byValues(order, obj1.x, obj2.x);
 		}, FlxSort.ASCENDING);
 		var lastGround = grounds.members[grounds.length - 1];
-		ground.makeGraphic(randomGroundWidth(), GROUND_HEIGHT, GROUND_COLORS[FlxG.random.int(0, GROUND_COLORS.length - 1)]);
+		ground.makeGraphic(randomGroundWidth(), GROUND_HEIGHT, randomGroundColor());
 		ground.updateHitbox();
 		ground.x = lastGround.x + lastGround.width + FlxG.random.int(20, 80);
 		var newGroundY = lastGround.y - FlxG.random.int(-30, 30);
@@ -303,11 +323,29 @@ class BubOnTheRunState extends GameState
 		{
 			ground.y = newGroundY;
 		}
+
+		if (FlxG.random.bool(50)) {
+			addObstacleToGround(ground);
+		}
+	}
+
+	function randomGroundColor():FlxColor
+	{
+		return cast(GROUND_COLORS[FlxG.random.int(0, GROUND_COLORS.length - 1)], FlxColor);
+	}
+
+	function addObstacleToGround(ground:FlxSprite)
+	{
+		var size = FlxG.random.int(8, 12);
+		var obstacle = obstacles.recycle(FlxSprite);
+		obstacle.makeGraphic(size, size, randomGroundColor());
+		var randomX = FlxG.random.int(Std.int(ground.x + (size * 1.5)), Std.int(ground.x + ground.width - (size * 1.5)));
+		obstacle.setPosition(randomX, ground.y - size);
 	}
 
 	function randomGroundWidth():Int
 	{
-		return FlxG.random.int(Std.int(FlxG.width / 4), Std.int(FlxG.width * 0.75));
+		return FlxG.random.int(Std.int(FlxG.width / 3), Std.int(FlxG.width * 1.25));
 	}
 
 	function handleJump(elapsed:Float)

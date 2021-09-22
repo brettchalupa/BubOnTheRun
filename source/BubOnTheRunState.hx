@@ -242,6 +242,9 @@ class BubOnTheRunState extends GameState
 				FlxG.sound.play("assets/sounds/jump.ogg");
 				startHud.kill();
 				FlxG.camera.follow(player, FlxCameraFollowStyle.PLATFORMER, 1);
+				var dz = FlxG.camera.deadzone;
+				dz.height *= 1.5;
+				FlxG.camera.deadzone = dz;
 				player.setPosition(grounds.members[0].x + 40, grounds.members[0].y - 80);
 				player.visible = false;
 

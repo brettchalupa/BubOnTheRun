@@ -3,9 +3,9 @@
 	xsi:schemaLocation="http://lime.software/project/1.0.2 http://lime.software/xsd/project-1.0.2.xsd">
 
 	<!-- _________________________ Application Settings _________________________ -->
-	<define name="gameVer" value="0.1.0" />
+	<define name="gameVer" value="2" />
 
-	<app title="Mimeo" file="Mimeo" main="Main" version="${gameVer}" company="Brett Chalupa" package="com.brettchalupa.mimeo" />
+	<app title="Mimeo" file="Mimeo" main="Main" version="0.${gameVer}.0" company="Brett Chalupa" package="com.brettchalupa.mimeo" />
 
 	<!--The flixel preloader is not accurate in Chrome. You can use it regularly if you embed the swf into a html file
 		or you can set the actual size of your file manually at "FlxPreloaderBase-onUpdate-bytesTotal"-->

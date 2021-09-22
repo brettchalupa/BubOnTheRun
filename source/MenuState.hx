@@ -65,7 +65,7 @@ class MenuState extends BaseState
 
 		addText("Select a game", 12, 0, FlxG.height - 28).screenCenter(FlxAxes.X);
 
-		var versionText = addText(Reg.version);
+		var versionText = addText("r" + Reg.version);
 		versionText.scale.set(0.5, 0.5);
 		versionText.updateHitbox();
 		versionText.setPosition(FlxG.width - versionText.width, FlxG.height - versionText.height);

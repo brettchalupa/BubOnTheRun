@@ -5,13 +5,21 @@ import flixel.FlxGame;
 import flixel.system.FlxAssets;
 import openfl.display.Sprite;
 
+#if debug
+import openfl.display.FPS;
+#end
+
 class Main extends Sprite
 {
 	public function new()
 	{
 		super();
 
-		addChild(new FlxGame(240, 135, MenuState, 1, 60, 60, true, false));
+		addChild(new FlxGame(240, 135, MenuState, 3, 60, 60, true, false));
+
+		#if debug
+		addChild(new FPS(4, 380, Color.WHITE));
+		#end
 
 		FlxG.sound.volume = 0.5;
 

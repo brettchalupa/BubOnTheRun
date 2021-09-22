@@ -42,6 +42,7 @@ class BubOnTheRunState extends GameState
 	var save:FlxSave;
 	var highScore:Float = 0;
 	var worldHeight:Int;
+	var justTouchedWall:Bool = false;
 
 	final MAX_VEL_X = 140;
 	final MAX_VEL_Y = 800;
@@ -250,6 +251,11 @@ class BubOnTheRunState extends GameState
 		else if (player.isTouching(FlxObject.WALL))
 		{
 			player.animation.play("wall");
+
+			if (!justTouchedWall)
+			{
+				FlxG.sound.play("assets/sounds/crash.ogg");
+			}
 		}
 		else if (player.isTouching(FlxObject.FLOOR))
 		{
@@ -266,6 +272,11 @@ class BubOnTheRunState extends GameState
 		{
 			player.animation.play("jump");
 		}
+
+		if (player.isTouching(FlxObject.WALL))
+			justTouchedWall = true;
+		else
+			justTouchedWall = false;
 	}
 
 	function positionGround(ground:FlxSprite)

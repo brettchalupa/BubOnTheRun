@@ -307,12 +307,10 @@ class BubOnTheRunState extends GameState
 		premiseText.screenCenter();
 		premiseText.y = startText.y + startText.height + 8;
 
-		highScoreText.autoSize = false;
-		highScoreText.alignment = FlxTextAlign.CENTER;
 		if (newHighScore)
 			highScoreText.text = 'new high-score: $newScore' + "s\n" + 'previous high-score: $highScore' + 's';
 		else
-			highScoreText.text = 'ur score: $newScore' + "s\n" + 'high-score: $highScore' + "s\n";
+			highScoreText.text = 'ur score: $newScore' + "s\n" + 'high-score: $highScore' + "s";
 	}
 
 	function updateTotalElapsedTime(elapsed:Float)

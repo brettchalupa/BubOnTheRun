@@ -14,23 +14,25 @@ using flixel.util.FlxSpriteUtil;
 
 class LonelyPaddleState extends GameState
 {
-	var walls = new FlxTypedGroup<FlxSprite>(3);
-	var star:FlxSprite;
-	var player:FlxSprite;
-	var ball:FlxSprite;
-	var collidables = new FlxGroup();
-	var hitSound:FlxSound;
-	var ballDeathSound:FlxSound;
-	var starSound:FlxSound;
-	var timeSinceStar:Float = 0;
-
-	final STAR_DELAY = 10.0;
-
+	static inline final MAX_BALLS:Int = 100;
+	final STAR_DELAY:Float = 10.0;
 	final WALL_THICKNESS:Int = 12;
 	final PLAYER_VEL:Int = 120;
 	final MAX_PLAYER_VEL:Int = 400;
 	final BALL_VEL:Int = 120;
 	final MAX_BALL_VEL:Int = 400;
+
+
+	var walls = new FlxTypedGroup<FlxSprite>(3);
+	var star:FlxSprite;
+	var player:FlxSprite;
+	var balls = new FlxTypedGroup<FlxSprite>(100);
+	var collidables = new FlxGroup();
+	var hitSound:FlxSound;
+	var ballDeathSound:FlxSound;
+	var starSound:FlxSound;
+	var timeSinceStar:Float = 0;
+	var gameOver:Bool = false;
 
 	override public function create()
 	{
@@ -71,14 +73,12 @@ class LonelyPaddleState extends GameState
 		player.drag.y = MAX_PLAYER_VEL;
 		add(player);
 
-		ball = new FlxSprite();
-		ball.loadGraphic("assets/images/lonely-paddle/ball.png");
-		ball.solid = true;
-		ball.elasticity = 1.0;
-		ball.maxVelocity.set(MAX_BALL_VEL, MAX_BALL_VEL);
-		ball.drag.set(0, 0);
-		resetBall();
-		add(ball);
+		for (i in 0...MAX_BALLS)
+		{
+			balls.add(makeBall());
+		}
+		add(balls);
+		spawnBall();
 
 		collidables.add(player);
 		collidables.add(walls);
@@ -94,55 +94,98 @@ class LonelyPaddleState extends GameState
 	{
 		super.update(elapsed);
 
-		if (!star.alive)
+		if (!gameOver)
 		{
-			timeSinceStar += elapsed;
-
-			if (timeSinceStar > STAR_DELAY)
+			if (!star.alive)
 			{
-				placeStar();
-				timeSinceStar = 0;
-			}
-		}
+				timeSinceStar += elapsed;
 
-		if (Input.pressed(Action.UP))
-		{
-			player.velocity.y = -PLAYER_VEL;
-		}
-		else if (Input.pressed(Action.DOWN))
-		{
-			player.velocity.y = PLAYER_VEL;
+				if (timeSinceStar > STAR_DELAY)
+				{
+					placeStar();
+					timeSinceStar = 0;
+				}
+			}
+
+			if (Input.pressed(Action.UP))
+			{
+				player.velocity.y = -PLAYER_VEL;
+			}
+			else if (Input.pressed(Action.DOWN))
+			{
+				player.velocity.y = PLAYER_VEL;
+			}
+			else
+			{
+				player.velocity.y = 0;
+			}
+
+			if (player.y < WALL_THICKNESS)
+			{
+				player.y = WALL_THICKNESS;
+			}
+			else if (player.y > FlxG.height - WALL_THICKNESS - player.height)
+			{
+				player.y = FlxG.height - WALL_THICKNESS - player.height;
+			}
+
+			FlxG.collide(balls, collidables, ballHitCollidable);
+			FlxG.overlap(balls, star, ballHitStar);
+
+			balls.forEachAlive(function(ball) {
+				if (!ball.inWorldBounds())
+				{
+					ballDeathSound.play();
+					ball.kill();
+				}
+			});
+
+			if (balls.getFirstAlive() == null)
+			{
+				gameOver = true;
+
+				FlxG.camera.flash(Color.WHITE, 0.75, function() {
+					var gameOverBG = new FlxSprite();
+					gameOverBG.makeGraphic(FlxG.width, FlxG.height, Color.BLACK);
+					gameOverBG.alpha = 0.8;
+					gameOverBG.screenCenter();
+					add(gameOverBG);
+					var gameOverText = new MimeoText("Game Over", Color.WHITE, 2).screenCenter();
+					gameOverText.y -= 18;
+					add(gameOverText);
+					var restartText = new MimeoText("Press ACTION to restart", Color.WHITE).screenCenter();
+					restartText.y = gameOverText.y + 40;
+					restartText.flicker(0, 0.4);
+					add(restartText);
+				});
+			}
 		}
 		else
 		{
-			player.velocity.y = 0;
-		}
-
-		if (player.y < WALL_THICKNESS)
-		{
-			player.y = WALL_THICKNESS;
-		}
-		else if (player.y > FlxG.height - WALL_THICKNESS - player.height)
-		{
-			player.y = FlxG.height - WALL_THICKNESS - player.height;
-		}
-
-		FlxG.collide(ball, collidables, ballHitCollidable);
-		FlxG.overlap(ball, star, ballHitStar);
-
-		if (!ball.inWorldBounds())
-		{
-			timeSinceStar = 0;
-			ballDeathSound.play();
-			new FlxTimer().start(0.4, function(_) {
-				ball.velocity.set(0, 0);
-				resetBall();
-			});
+			if (Input.justPressed(Action.CONFIRM)) 
+			{
+				FlxG.resetState();
+			}
 		}
 	}
 
-	function resetBall()
+
+	function makeBall()
 	{
+		var ball = new FlxSprite();
+		ball.loadGraphic("assets/images/lonely-paddle/ball.png");
+		ball.solid = true;
+		ball.elasticity = 1.0;
+		ball.maxVelocity.set(MAX_BALL_VEL, MAX_BALL_VEL);
+		ball.drag.set(0, 0);
+		ball.kill();
+		return ball;
+	}
+
+	function spawnBall()
+	{
+		var ball = balls.recycle(FlxSprite);
+		ball.revive();
 		ball.screenCenter();
 		ball.flicker(1, 0.08, true, true, function(_) {
 			ball.velocity.set(BALL_VEL, BALL_VEL);
@@ -153,6 +196,7 @@ class LonelyPaddleState extends GameState
 	{
 		starSound.play();
 		star.kill();
+		spawnBall();
 		timeSinceStar = 0;
 	}
 
@@ -211,8 +255,8 @@ class LonelyPaddleState extends GameState
 				ease: FlxEase.elasticInOut,
 				onComplete: function(tween:FlxTween) {
 				  if (tween.executions == 2) {
-																													  tween.cancel();
-																												  }
+					  tween.cancel();
+				  }
 			  }
 			}
 		);

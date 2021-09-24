@@ -17,7 +17,7 @@ class LonelyPaddleState extends GameState
 	static inline final MAX_BALLS:Int = 100;
 	final STAR_DELAY:Float = 10.0;
 	final WALL_THICKNESS:Int = 12;
-	final PLAYER_VEL:Int = 120;
+	final PLAYER_VEL:Int = 140;
 	final MAX_PLAYER_VEL:Int = 400;
 	final BALL_VEL:Int = 120;
 	final MAX_BALL_VEL:Int = 400;

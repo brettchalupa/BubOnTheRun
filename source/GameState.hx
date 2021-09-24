@@ -7,7 +7,7 @@ import flixel.util.FlxAxes;
 
 class GameState extends FlxState
 {
-	final game:Game;
+	var game:Game;
 
 	public function new(_game:Game)
 	{
@@ -17,6 +17,15 @@ class GameState extends FlxState
 
 	override public function create()
 	{
+		if (game == null)
+		{
+			for (_game in Reg.games)
+			{
+				if (_game.state == Type.getClass(this))
+					game = _game;
+			}
+		}
+
 		super.create();
 	}
 

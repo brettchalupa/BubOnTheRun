@@ -71,6 +71,13 @@ class Reg
 				"Dodge the bullets and take down enemy ships",
 				true,
 				BulletHeckState
+			),
+			new Game(
+				"Lonely Paddle",
+				"lonely-paddle",
+				"For those without a table tennis partner",
+				true,
+				LonelyPaddleState
 			)
 		];
 	}

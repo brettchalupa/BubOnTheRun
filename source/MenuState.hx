@@ -13,7 +13,13 @@ class MenuState extends FlxState
 	var games = new Array<Game>();
 	var focusedGame:Game;
 
-	override public function new(initialFocusedSlug:String = "bub-on-the-run")
+#if debug
+	static inline final INITIAL_GAME = "lonely-paddle";
+#else
+	static inline final INITIAL_GAME = "bub-on-the-run";
+#end
+
+	override public function new(initialFocusedSlug:String = INITIAL_GAME)
 	{
 		for (game in Reg.games)
 		{

@@ -11,9 +11,9 @@ import flixel.util.FlxAxes;
 class MenuState extends FlxState
 {
 	var games = new Array<Game>();
-	var selectedGame:Game;
+	var focusedGame:Game;
 
-	override public function new(initialGameSlug:String = "bub-on-the-run")
+	override public function new(initialFocusedSlug:String = "bub-on-the-run")
 	{
 		for (game in Reg.games)
 		{
@@ -25,8 +25,8 @@ class MenuState extends FlxState
 			}
 			#end
 
-			if (game.slug == initialGameSlug)
-				selectedGame = game;
+			if (game.slug == initialFocusedSlug)
+				focusedGame = game;
 
 		}
 		super();
@@ -63,7 +63,7 @@ class MenuState extends FlxState
 		var caret = new FlxSprite();
 		caret.loadGraphic("assets/images/caret.png");
 		caret.screenCenter(FlxAxes.X);
-		caret.y = selectedGame.cover.y + selectedGame.cover.height + 5;
+		caret.y = focusedGame.cover.y + focusedGame.cover.height + 5;
 		FlxTween.tween(caret, {y: caret.y + 2.0}, 0.5, {
 			type: FlxTweenType.PINGPONG
 		});
@@ -76,13 +76,13 @@ class MenuState extends FlxState
 	{
 		if (Input.justReleased(Action.LEFT))
 		{
-			var index = games.indexOf(selectedGame);
+			var index = games.indexOf(focusedGame);
 			index = index - 1;
 			if (index < 0)
 			{
 				index = games.length - 1;
 			}
-			selectedGame = games[index];
+			focusedGame = games[index];
 			FlxG.sound.play("assets/sounds/click.ogg");
 
 			positionGames();
@@ -90,13 +90,13 @@ class MenuState extends FlxState
 
 		if (Input.justReleased(Action.RIGHT))
 		{
-			var index = games.indexOf(selectedGame);
+			var index = games.indexOf(focusedGame);
 			index = index + 1;
 			if (index >= games.length)
 			{
 				index = 0;
 			}
-			selectedGame = games[index];
+			focusedGame = games[index];
 			FlxG.sound.play("assets/sounds/click.ogg");
 			positionGames();
 		}
@@ -110,7 +110,7 @@ class MenuState extends FlxState
 
 		if (Input.justReleased(Action.CONFIRM))
 		{
-			FlxG.switchState(selectedGame.newState());
+			FlxG.switchState(focusedGame.newState());
 		}
 		super.update(elapsed);
 	}
@@ -122,7 +122,7 @@ class MenuState extends FlxState
 			var index = games.indexOf(game);
 			var cover = game.cover;
 			cover.screenCenter();
-			cover.x = cover.x + (cover.width + 10) * (index - games.indexOf(selectedGame));
+			cover.x = cover.x + (cover.width + 10) * (index - games.indexOf(focusedGame));
 		}
 	}
 }

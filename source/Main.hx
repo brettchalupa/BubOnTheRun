@@ -18,7 +18,7 @@ class Main extends Sprite
 		addChild(new FlxGame(240, 135, MenuState, 3, 60, 60, true, false));
 
 		#if debug
-		addChild(new FPS(4, 380, Color.WHITE));
+		addChild(new FPS(4, 512, Color.WHITE));
 		#end
 
 		FlxG.sound.volume = 0.5;

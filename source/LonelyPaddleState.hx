@@ -153,7 +153,6 @@ class LonelyPaddleState extends GameState
 	{
 		starSound.play();
 		star.kill();
-		placeStar();
 		timeSinceStar = 0;
 	}
 
@@ -161,14 +160,12 @@ class LonelyPaddleState extends GameState
 
 	function placeStar()
 	{
-		star.visible = true;
 		star.setPosition(
 			FlxG.random.int(STAR_POS_MOD, FlxG.width - WALL_THICKNESS - STAR_POS_MOD),
 			FlxG.random.int(WALL_THICKNESS + STAR_POS_MOD, FlxG.height - WALL_THICKNESS - STAR_POS_MOD)
 		);
-		star.flicker(1, 0.04, true, true, function(_) {
-			star.revive();
-		});
+		star.revive();
+		star.flicker();
 	}
 
 	function ballHitCollidable(_ball, _collidable)

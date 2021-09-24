@@ -1,6 +1,6 @@
 package;
 
-import InputManager.Action;
+import Input.Action;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import openfl.utils.Assets;
@@ -68,7 +68,7 @@ class HeartsState extends GameState
 	{
 		super.update(elapsed);
 
-		if (input.justPressed(Action.CONFIRM))
+		if (Input.justPressed(Action.CONFIRM))
 		{
 			FlxG.sound.play("assets/sounds/crash.ogg");
 			renderNextLine();

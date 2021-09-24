@@ -1,6 +1,6 @@
 package;
 
-import InputManager.Action;
+import Input.Action;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.util.FlxAxes;
@@ -105,15 +105,15 @@ class QuickDrawState extends GameState
 	{
 		if (!drawing)
 		{
-			if (input.justPressed(Action.LEFT))
+			if (Input.justPressed(Action.LEFT))
 			{
 				doDraw(ROCK);
 			}
-			else if (input.justPressed(Action.UP))
+			else if (Input.justPressed(Action.UP))
 			{
 				doDraw(PAPER);
 			}
-			else if (input.justPressed(Action.RIGHT))
+			else if (Input.justPressed(Action.RIGHT))
 			{
 				doDraw(SCISSORS);
 			}

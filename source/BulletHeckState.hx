@@ -1,7 +1,7 @@
 package;
 
 import Color;
-import InputManager.Action;
+import Input.Action;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
@@ -64,22 +64,22 @@ class BulletHeckState extends GameState
 	{
 		if (gameOver)
 		{
-			if (input.pressed(Action.CONFIRM))
+			if (Input.pressed(Action.CONFIRM))
 			{
 				FlxG.resetState();
 			}
 		}
 		else
 		{
-			if (input.pressed(Action.LEFT))
+			if (Input.pressed(Action.LEFT))
 			{
 				player.x -= 2;
 			}
-			if (input.pressed(Action.RIGHT))
+			if (Input.pressed(Action.RIGHT))
 			{
 				player.x += 2;
 			}
-			if (input.justPressed(Action.CONFIRM))
+			if (Input.justPressed(Action.CONFIRM))
 			{
 				bullets.add(shootBullet(elapsed));
 			}

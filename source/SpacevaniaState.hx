@@ -43,7 +43,7 @@ class SpacevaniaState extends GameState
 		walls.setTileProperties(1, FlxObject.ANY);
 		add(walls);
 
-		player = new Player(input);
+		player = new Player();
 		add(player.bullets);
 		add(player);
 

@@ -2,13 +2,14 @@ package;
 
 import Color;
 import GameType;
-import InputManager.Action;
+import Input.Action;
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.FlxState;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxAxes;
 
-class MenuState extends BaseState
+class MenuState extends FlxState
 {
 	var selectedGame:GameState;
 
@@ -87,7 +88,7 @@ class MenuState extends BaseState
 
 	override public function update(elapsed:Float)
 	{
-		if (input.justReleased(Action.LEFT))
+		if (Input.justReleased(Action.LEFT))
 		{
 			var index = games.indexOf(selectedGame);
 			index = index - 1;
@@ -101,7 +102,7 @@ class MenuState extends BaseState
 			positionGames();
 		}
 
-		if (input.justReleased(Action.RIGHT))
+		if (Input.justReleased(Action.RIGHT))
 		{
 			var index = games.indexOf(selectedGame);
 			index = index + 1;
@@ -115,13 +116,13 @@ class MenuState extends BaseState
 		}
 
 		#if desktop
-		if (input.justReleased(Action.CANCEL))
+		if (Input.justReleased(Action.CANCEL))
 		{
 			Sys.exit(0);
 		}
 		#end
 
-		if (input.justReleased(Action.CONFIRM))
+		if (Input.justReleased(Action.CONFIRM))
 		{
 			FlxG.switchState(selectedGame);
 		}

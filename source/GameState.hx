@@ -1,12 +1,13 @@
 package;
 
 import GameType;
-import InputManager.Action;
+import Input.Action;
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.FlxState;
 import flixel.util.FlxAxes;
 
-class GameState extends BaseState
+class GameState extends FlxState
 {
 	public var cover(default, null):FlxSprite;
 
@@ -17,7 +18,7 @@ class GameState extends BaseState
 
 	override public function update(elapsed:Float)
 	{
-		if (input.justReleased(Action.CANCEL))
+		if (Input.justReleased(Action.CANCEL))
 		{
 			FlxG.switchState(new MenuState(gameType()));
 		}

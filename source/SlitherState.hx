@@ -1,7 +1,7 @@
 package;
 
 import Color;
-import InputManager.Action;
+import Input.Action;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.math.FlxPoint;
@@ -77,7 +77,7 @@ class SlitherState extends GameState
 	{
 		if (gameOver)
 		{
-			if (input.pressed(Action.CONFIRM))
+			if (Input.pressed(Action.CONFIRM))
 			{
 				FlxG.resetState();
 			}
@@ -87,7 +87,7 @@ class SlitherState extends GameState
 			var prevDirection = direction;
 			timeSinceLastMove += elapsed;
 
-			if (input.justPressed(Action.LEFT))
+			if (Input.justPressed(Action.LEFT))
 			{
 				if (parts.length > 0)
 				{
@@ -102,7 +102,7 @@ class SlitherState extends GameState
 				}
 			}
 
-			if (input.justPressed(Action.RIGHT))
+			if (Input.justPressed(Action.RIGHT))
 			{
 				if (parts.length > 0)
 				{
@@ -117,7 +117,7 @@ class SlitherState extends GameState
 				}
 			}
 
-			if (input.justPressed(Action.UP))
+			if (Input.justPressed(Action.UP))
 			{
 				if (parts.length > 0)
 				{
@@ -132,7 +132,7 @@ class SlitherState extends GameState
 				}
 			}
 
-			if (input.justPressed(Action.DOWN))
+			if (Input.justPressed(Action.DOWN))
 			{
 				if (parts.length > 0)
 				{
@@ -148,7 +148,7 @@ class SlitherState extends GameState
 			}
 
 			#if debug
-			if (input.justPressed(Action.CONFIRM))
+			if (Input.justPressed(Action.CONFIRM))
 			{
 				generatePart();
 			}

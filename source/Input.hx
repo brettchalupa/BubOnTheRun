@@ -12,7 +12,7 @@ enum Action
 	CANCEL;
 }
 
-class InputManager
+class Input
 {
 	static final LEFT_KEYS = [FlxKey.LEFT, FlxKey.A];
 	static final RIGHT_KEYS = [FlxKey.RIGHT, FlxKey.D];
@@ -28,14 +28,12 @@ class InputManager
 	static final CONFIRM_BUTTONS = [FlxGamepadInputID.A];
 	static final CANCEL_BUTTONS = [FlxGamepadInputID.B];
 
-	public function new() {}
-
-	public function justReleased(action:Action):Bool
+	public static function justReleased(action:Action):Bool
 	{
 		return justReleasedKey(action) || justReleasedGamepad(action) || justReleasedMouse(action);
 	}
 
-	private function justReleasedKey(action:Action):Bool
+	private static function justReleasedKey(action:Action):Bool
 	{
 		#if FLX_KEYBOARD
 		return FlxG.keys.anyJustReleased(keysForAction(action));
@@ -44,7 +42,7 @@ class InputManager
 		#end
 	}
 
-	private function justReleasedGamepad(action:Action):Bool
+	private static function justReleasedGamepad(action:Action):Bool
 	{
 		#if !FLX_NO_GAMEPAD
 		var gamepad = FlxG.gamepads.lastActive;
@@ -56,7 +54,7 @@ class InputManager
 		#end
 	}
 
-	public function justReleasedMouse(action:Action):Bool
+	public static function justReleasedMouse(action:Action):Bool
 	{
 		#if FLX_MOUSE
 		switch (action)
@@ -71,12 +69,12 @@ class InputManager
 		#end
 	}
 
-	public function pressed(action:Action):Bool
+	public static function pressed(action:Action):Bool
 	{
 		return pressedKeyboard(action) || pressedGamepad(action) || pressedMouse(action);
 	}
 
-	private function pressedKeyboard(action:Action):Bool
+	private static function pressedKeyboard(action:Action):Bool
 	{
 		#if FLX_KEYBOARD
 		return FlxG.keys.anyPressed(keysForAction(action));
@@ -85,7 +83,7 @@ class InputManager
 		#end
 	}
 
-	private function pressedGamepad(action:Action):Bool
+	private static function pressedGamepad(action:Action):Bool
 	{
 		#if !FLX_NO_GAMEPAD
 		var gamepad = FlxG.gamepads.lastActive;
@@ -97,7 +95,7 @@ class InputManager
 		#end
 	}
 
-	public function pressedMouse(action:Action):Bool
+	public static function pressedMouse(action:Action):Bool
 	{
 		#if FLX_MOUSE
 		switch (action)
@@ -112,12 +110,12 @@ class InputManager
 		#end
 	}
 
-	public function justPressed(action:Action):Bool
+	public static function justPressed(action:Action):Bool
 	{
 		return justPressedKey(action) || justPressedGamepad(action) || justPressedMouse(action);
 	}
 
-	private function justPressedKey(action:Action):Bool
+	private static function justPressedKey(action:Action):Bool
 	{
 		#if FLX_KEYBOARD
 		return FlxG.keys.anyJustPressed(keysForAction(action));
@@ -126,7 +124,7 @@ class InputManager
 		#end
 	}
 
-	private function justPressedGamepad(action:Action):Bool
+	private static function justPressedGamepad(action:Action):Bool
 	{
 		#if !FLX_NO_GAMEPAD
 		var gamepad = FlxG.gamepads.lastActive;
@@ -138,7 +136,7 @@ class InputManager
 		#end
 	}
 
-	public function justPressedMouse(action):Bool
+	public static function justPressedMouse(action):Bool
 	{
 		#if FLX_MOUSE
 		switch (action)
@@ -153,7 +151,7 @@ class InputManager
 		#end
 	}
 
-	private function keysForAction(action:Action):Array<FlxKey>
+	private static function keysForAction(action:Action):Array<FlxKey>
 	{
 		switch action
 		{
@@ -174,7 +172,7 @@ class InputManager
 		}
 	}
 
-	private function buttonsForAction(action:Action):Array<FlxGamepadInputID>
+	private static function buttonsForAction(action:Action):Array<FlxGamepadInputID>
 	{
 		switch action
 		{

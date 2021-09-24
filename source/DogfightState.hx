@@ -29,7 +29,7 @@ class DogfightState extends GameState
 
 		add(new FlxBackdrop("assets/images/dogfight/bg.png"));
 
-		player = new Player(input);
+		player = new Player();
 		add(player.bullets);
 		add(player);
 

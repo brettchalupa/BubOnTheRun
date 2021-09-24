@@ -1,6 +1,6 @@
 package dogfight;
 
-import InputManager.Action;
+import Input.Action;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
@@ -25,17 +25,15 @@ class Player extends FlxSprite
 	final MAX_BULLETS = 40;
 	final SHOT_COOLDOWN = 0.25;
 	var lastAcceleration = 0.0;
-	var input:InputManager;
 	var timeSinceLastShot:Float = 0.0;
 	var thrust:Float = 0.0;
 	final MAX_ANGULAR = 120;
 	final ANGULAR_DRAG = 420;
 	final DRAG = 3;
 
-	public function new(_input:InputManager)
+	public function new()
 	{
 		super();
-		input = _input;
 		loadGraphic("assets/images/dogfight/player.png", 16);
 		screenCenter();
 		drag.set(DRAG, DRAG);
@@ -83,7 +81,7 @@ class Player extends FlxSprite
 	{
 		handleSteering(elapsed);
 
-		if (input.pressed(Action.CONFIRM) && timeSinceLastShot >= SHOT_COOLDOWN)
+		if (Input.pressed(Action.CONFIRM) && timeSinceLastShot >= SHOT_COOLDOWN)
 		{
 			timeSinceLastShot = 0.0;
 			FlxG.sound.play("assets/sounds/click.ogg");
@@ -106,11 +104,11 @@ class Player extends FlxSprite
 
 	function handleSteering(elapsed:Float)
 	{
-		if (input.pressed(Action.LEFT))
+		if (Input.pressed(Action.LEFT))
 		{
 			angularAcceleration = -angularDrag;
 		}
-		else if (input.pressed(Action.RIGHT))
+		else if (Input.pressed(Action.RIGHT))
 		{
 			angularAcceleration = angularDrag;
 		}
@@ -122,7 +120,7 @@ class Player extends FlxSprite
 		var _up:Bool = false;
 		var _down:Bool = false;
 
-		if (input.pressed(Action.UP))
+		if (Input.pressed(Action.UP))
 		{
 			color = Color.PINK;
 			_up = true;

@@ -1,6 +1,6 @@
 package;
 
-import InputManager.Action;
+import Input.Action;
 import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxObject;
@@ -236,7 +236,7 @@ class BubOnTheRunState extends GameState
 			}
 			else if (displayGameOver)
 			{
-				if (input.justPressed(CONFIRM))
+				if (Input.justPressed(CONFIRM))
 				{
 					FlxG.sound.play("assets/sounds/jump.ogg");
 					FlxG.camera.fade(Color.BLACK, 1, false, function()
@@ -248,7 +248,7 @@ class BubOnTheRunState extends GameState
 		}
 		else
 		{
-			if (input.justPressed(CONFIRM))
+			if (Input.justPressed(CONFIRM))
 			{
 				FlxG.sound.play("assets/sounds/jump.ogg");
 				startHud.kill();
@@ -407,7 +407,7 @@ class BubOnTheRunState extends GameState
 
 	function handleJump(elapsed:Float)
 	{
-		var jumpPressed:Bool = input.pressed(Action.CONFIRM);
+		var jumpPressed:Bool = Input.pressed(Action.CONFIRM);
 
 		if (jumping && !jumpPressed)
 			jumping = false;

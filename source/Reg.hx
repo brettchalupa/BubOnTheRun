@@ -68,7 +68,7 @@ class Reg
 			new Game(
 				"Bullet Heck",
 				"bullet-heck",
-				"Dodge the bullets and take down enemy ships",
+				"A cute 'em up",
 				true,
 				BulletHeckState
 			),

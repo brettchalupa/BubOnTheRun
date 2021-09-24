@@ -31,8 +31,9 @@ class HeartsState extends GameState
 	{
 		super.create();
 
-		var title = addText("Cutscene Prototype", 2);
+		var title = new MimeoText("Cutscene Prototype", Color.BLACK, 2);
 		title.setPosition(8, 8);
+		add(title);
 
 		FlxG.cameras.bgColor = Color.WHITE;
 
@@ -52,8 +53,9 @@ class HeartsState extends GameState
 		dialogueText.fieldWidth = Std.int(dialogueBg.width - 4);
 		add(dialogueText);
 
-		currentlySpeakingText = addText("", 1, dialogueBg.x + 4, dialogueBg.y - 10, Color.BLUE);
+		currentlySpeakingText = new MimeoText("", Color.BLUE, 1, dialogueBg.x + 4, dialogueBg.y - 10);
 		currentlySpeakingText.visible = false;
+		add(currentlySpeakingText);
 
 		characterPortrait = new FlxSprite(dialogueBg.x + dialogueBg.width - PORTRAIT_SIZE - 4, dialogueBg.y - PORTRAIT_SIZE);
 		characterPortrait.visible = false;

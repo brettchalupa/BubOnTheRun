@@ -89,13 +89,16 @@ class QuickDrawState extends GameState
 		scissors.setPosition(rightArrow.x + scissors.width + PADDING, rightArrow.y);
 		add(scissors);
 
-		var drawText = addText('QUICK DRAW!', 1, 0, 12, Color.BLACK).screenCenter(FlxAxes.X);
+		var drawText = new MimeoText('QUICK DRAW!', Color.BLACK, 1, 0, 12).screenCenter(FlxAxes.X);
+		add(drawText);
 
-		resultsText = addText('', 1, -1000, -1000);
+		resultsText = new MimeoText('', Color.BLACK, 1, -1000, -1000);
 		resultsText.visible = false;
+		add(resultsText);
 
-		scoresText = addText(scoresString(), 1, PADDING);
+		scoresText = new MimeoText(scoresString(), Color.BLACK, 1, PADDING);
 		scoresText.y = FlxG.height - scoresText.height - (PADDING * 8);
+		add(scoresText);
 	}
 
 	override public function update(elapsed:Float)

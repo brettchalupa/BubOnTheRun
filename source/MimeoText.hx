@@ -19,7 +19,7 @@ class MimeoText extends FlxBitmapText
 		FONT = FlxBitmapFont.fromMonospace("assets/fonts/mono.png", CHARS, FlxPoint.get(6, 9));
 	}
 
-	public function new(_text:String, _color:Int = Color.BLACK, _scale:Float = 1.0)
+	public function new(_text:String, _color:Color = Color.BLACK, _scale:Float = 1.0, _x:Float = 0, _y:Float = 0)
 	{
 		if (FONT == null)
 		{
@@ -35,5 +35,6 @@ class MimeoText extends FlxBitmapText
 		scale.set(_scale, _scale);
 		width = width;
 		updateHitbox();
+		setPosition(_x, _y);
 	}
 }

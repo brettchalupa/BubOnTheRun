@@ -15,6 +15,8 @@ class Main extends Sprite
 	{
 		super();
 
+		Reg.loadGames();
+
 		addChild(new FlxGame(240, 135, MenuState, 3, 60, 60, true, false));
 
 		#if debug

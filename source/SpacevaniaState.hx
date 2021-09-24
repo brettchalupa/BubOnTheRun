@@ -11,16 +11,6 @@ import spacevania.Player;
 
 class SpacevaniaState extends GameState
 {
-	override function slug():String
-	{
-		return "spacevania";
-	}
-
-	override public function gameType():GameType
-	{
-		return GameType.SPACEVANIA;
-	}
-
 	var player:Player;
 	var isGameOver:Bool = false;
 	var totalElapsedTime:Float;

@@ -24,16 +24,6 @@ enum Outcome
 
 class QuickDrawState extends GameState
 {
-	override function slug():String
-	{
-		return "quick-draw";
-	}
-
-	override public function gameType():GameType
-	{
-		return GameType.QUICK_DRAW;
-	}
-
 	final DRAW_OPTIONS:Array<DrawType> = [ROCK, PAPER, SCISSORS];
 	var rock:FlxSprite;
 	var paper:FlxSprite;

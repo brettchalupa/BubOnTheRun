@@ -11,11 +11,6 @@ using StringTools;
 
 class BulletHeckState extends GameState
 {
-	override public function gameType():GameType
-	{
-		return GameType.BULLET_HECK;
-	}
-
 	var player:FlxSprite;
 	var bullets:FlxTypedGroup<FlxSprite>;
 	var enemies:FlxTypedGroup<FlxSprite>;
@@ -53,11 +48,6 @@ class BulletHeckState extends GameState
 		scoreText.setPosition(FlxG.width - scoreText.width - 12, 3);
 		add(scoreText);
 		updateScore(0);
-	}
-
-	override function slug():String
-	{
-		return "bullet-heck";
 	}
 
 	override public function update(elapsed:Float)

@@ -1,7 +1,6 @@
 package;
 
 import Color;
-import GameType;
 import Input.Action;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -11,37 +10,24 @@ import flixel.util.FlxAxes;
 
 class MenuState extends FlxState
 {
-	var selectedGame:GameState;
+	var games = new Array<Game>();
+	var selectedGame:Game;
 
-	#if debug
-	var games:Array<GameState> = [
-		new GbloxState(),
-		new SlitherState(),
-		new DogfightState(),
-		new QuickDrawState(),
-		new RoyaltyState(),
-		new HeartsState(),
-		new BubOnTheRunState(),
-		new SpacevaniaState(),
-		new BulletHeckState()
-	];
-	#else
-	var games:Array<GameState> = [
-		new SlitherState(),
-		new QuickDrawState(),
-		new HeartsState(),
-		new BubOnTheRunState(),
-		new SpacevaniaState(),
-		new BulletHeckState()
-	];
-	#end
-
-	override public function new(initialGameType:GameType = BUB_ON_THE_RUN)
+	override public function new(initialGameSlug:String = "bub-on-the-run")
 	{
-		for (game in games)
+		for (game in Reg.games)
 		{
-			if (game.gameType() == initialGameType)
+			#if debug
+			games.push(game);
+			#else
+			if (game.publiclyVisible) {
+				games.push(game);
+			}
+			#end
+
+			if (game.slug == initialGameSlug)
 				selectedGame = game;
+
 		}
 		super();
 	}
@@ -124,7 +110,7 @@ class MenuState extends FlxState
 
 		if (Input.justReleased(Action.CONFIRM))
 		{
-			FlxG.switchState(selectedGame);
+			FlxG.switchState(selectedGame.newState());
 		}
 		super.update(elapsed);
 	}

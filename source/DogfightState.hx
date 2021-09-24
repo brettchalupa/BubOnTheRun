@@ -7,16 +7,6 @@ import flixel.addons.display.FlxBackdrop;
 
 class DogfightState extends GameState
 {
-	override function slug():String
-	{
-		return "dogfight";
-	}
-
-	override public function gameType():GameType
-	{
-		return GameType.DOGFIGHT;
-	}
-
 	var player:Player;
 	var isGameOver:Bool = false;
 	var totalElapsedTime:Float;

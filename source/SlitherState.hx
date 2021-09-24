@@ -20,16 +20,6 @@ enum Direction
 
 class SlitherState extends GameState
 {
-	override function slug():String
-	{
-		return "slither";
-	}
-
-	override public function gameType():GameType
-	{
-		return GameType.SLITHER;
-	}
-
 	var direction:Direction = UP;
 	var player:FlxSprite;
 	var apple:FlxSprite;

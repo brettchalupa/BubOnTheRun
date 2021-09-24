@@ -22,16 +22,6 @@ using flixel.util.FlxSpriteUtil;
 
 class BubOnTheRunState extends GameState
 {
-	override function slug():String
-	{
-		return "bub-on-the-run";
-	}
-
-	override public function gameType():GameType
-	{
-		return GameType.BUB_ON_THE_RUN;
-	}
-
 	var player:FlxSprite;
 	var jumpTimer:Float = 0;
 	var jumping:Bool = false;

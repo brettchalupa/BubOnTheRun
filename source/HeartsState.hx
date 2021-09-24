@@ -9,16 +9,6 @@ using StringTools;
 
 class HeartsState extends GameState
 {
-	override function slug():String
-	{
-		return "hearts";
-	}
-
-	override public function gameType():GameType
-	{
-		return GameType.HEARTS;
-	}
-
 	var lines:Array<String>;
 	var currentLineIndex:Int = 0;
 	var characterPortrait:FlxSprite;

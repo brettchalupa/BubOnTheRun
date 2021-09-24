@@ -1,15 +1,19 @@
 package;
 
-import GameType;
 import Input.Action;
 import flixel.FlxG;
-import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.util.FlxAxes;
 
 class GameState extends FlxState
 {
-	public var cover(default, null):FlxSprite;
+	final game:Game;
+
+	public function new(_game:Game)
+	{
+		super();
+		game = _game;
+	}
 
 	override public function create()
 	{
@@ -20,28 +24,9 @@ class GameState extends FlxState
 	{
 		if (Input.justReleased(Action.CANCEL))
 		{
-			FlxG.switchState(new MenuState(gameType()));
+			FlxG.switchState(new MenuState(game.slug));
 		}
 
 		super.update(elapsed);
-	}
-
-	public function loadCover():FlxSprite
-	{
-		cover = new FlxSprite();
-		var path = "assets/images/cover-" + slug() + ".png";
-		cover.loadGraphic(path);
-		cover.screenCenter();
-		return cover;
-	}
-
-	public function slug():String
-	{
-		return "game";
-	}
-
-	public function gameType():GameType
-	{
-		return GameType.DEFAULT;
 	}
 }

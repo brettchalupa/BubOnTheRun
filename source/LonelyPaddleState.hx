@@ -15,11 +15,16 @@ using flixel.util.FlxSpriteUtil;
 class LonelyPaddleState extends GameState
 {
 	var walls = new FlxTypedGroup<FlxSprite>(3);
+	var star:FlxSprite;
 	var player:FlxSprite;
 	var ball:FlxSprite;
 	var collidables = new FlxGroup();
 	var hitSound:FlxSound;
 	var ballDeathSound:FlxSound;
+	var starSound:FlxSound;
+	var timeSinceStar:Float = 0;
+
+	final STAR_DELAY = 10.0;
 
 	final WALL_THICKNESS:Int = 12;
 	final PLAYER_VEL:Int = 120;
@@ -53,6 +58,11 @@ class LonelyPaddleState extends GameState
 
 		add(walls);
 
+		star = new FlxSprite();
+		star.loadGraphic("assets/images/lonely-paddle/star.png");
+		star.kill();
+		add(star);
+
 		player = new FlxSprite(4, 0);
 		player.loadGraphic("assets/images/lonely-paddle/paddle.png");
 		player.screenCenter(FlxAxes.Y);
@@ -77,11 +87,23 @@ class LonelyPaddleState extends GameState
 
 		hitSound = FlxG.sound.load("assets/sounds/crash.ogg");
 		ballDeathSound = FlxG.sound.load("assets/sounds/death.ogg");
+		starSound = FlxG.sound.load("assets/sounds/jump.ogg");
 	}
 
 	override public function update(elapsed:Float)
 	{
 		super.update(elapsed);
+
+		if (!star.alive)
+		{
+			timeSinceStar += elapsed;
+
+			if (timeSinceStar > STAR_DELAY)
+			{
+				placeStar();
+				timeSinceStar = 0;
+			}
+		}
 
 		if (Input.pressed(Action.UP))
 		{
@@ -106,12 +128,14 @@ class LonelyPaddleState extends GameState
 		}
 
 		FlxG.collide(ball, collidables, ballHitCollidable);
+		FlxG.overlap(ball, star, ballHitStar);
 
 		if (!ball.inWorldBounds())
 		{
-			ball.velocity.set(0, 0);
+			timeSinceStar = 0;
 			ballDeathSound.play();
 			new FlxTimer().start(0.4, function(_) {
+				ball.velocity.set(0, 0);
 				resetBall();
 			});
 		}
@@ -122,6 +146,28 @@ class LonelyPaddleState extends GameState
 		ball.screenCenter();
 		ball.flicker(1, 0.08, true, true, function(_) {
 			ball.velocity.set(BALL_VEL, BALL_VEL);
+		});
+	}
+
+	function ballHitStar(_, _)
+	{
+		starSound.play();
+		star.kill();
+		placeStar();
+		timeSinceStar = 0;
+	}
+
+	final STAR_POS_MOD = 20;
+
+	function placeStar()
+	{
+		star.visible = true;
+		star.setPosition(
+			FlxG.random.int(STAR_POS_MOD, FlxG.width - WALL_THICKNESS - STAR_POS_MOD),
+			FlxG.random.int(WALL_THICKNESS + STAR_POS_MOD, FlxG.height - WALL_THICKNESS - STAR_POS_MOD)
+		);
+		star.flicker(1, 0.04, true, true, function(_) {
+			star.revive();
 		});
 	}
 
@@ -149,8 +195,8 @@ class LonelyPaddleState extends GameState
 					ease: FlxEase.elasticInOut,
 					onComplete: function(tween:FlxTween) {
 					  if (tween.executions == 2) {
-																														  tween.cancel();
-																													  }
+						  tween.cancel();
+					  }
 				  }
 				}
 			);

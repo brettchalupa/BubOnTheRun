@@ -31,8 +31,8 @@ class HeartsState extends GameState
 	{
 		super.create();
 
-		var title = addText("Cutscene Prototype");
-		title.setPosition(4, 4);
+		var title = addText("Cutscene Prototype", 2);
+		title.setPosition(8, 8);
 
 		FlxG.cameras.bgColor = Color.WHITE;
 
@@ -68,6 +68,7 @@ class HeartsState extends GameState
 
 		if (input.justPressed(Action.CONFIRM))
 		{
+			FlxG.sound.play("assets/sounds/crash.ogg");
 			renderNextLine();
 		}
 	}

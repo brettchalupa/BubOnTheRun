@@ -52,7 +52,7 @@ class HeartsState extends GameState
 		dialogueText.fieldWidth = Std.int(dialogueBg.width - 4);
 		add(dialogueText);
 
-		currentlySpeakingText = addText("", 12, dialogueBg.x + 4, dialogueBg.y - 10, Color.BLUE);
+		currentlySpeakingText = addText("", 1, dialogueBg.x + 4, dialogueBg.y - 10, Color.BLUE);
 		currentlySpeakingText.visible = false;
 
 		characterPortrait = new FlxSprite(dialogueBg.x + dialogueBg.width - PORTRAIT_SIZE - 4, dialogueBg.y - PORTRAIT_SIZE);

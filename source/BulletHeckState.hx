@@ -49,8 +49,7 @@ class BulletHeckState extends GameState
 		var scoreBg = new FlxSprite(0, 0);
 		scoreBg.makeGraphic(FlxG.width, 4 + 9, Color.WHITE);
 		add(scoreBg);
-		scoreText = addText('Score: 000000', 12, 3, 3);
-		scoreText.alignment = "right";
+		scoreText = addText('Score: 000000', 1, 3, 3);
 		scoreText.x = FlxG.width - scoreText.width - 12;
 		updateScore(0);
 	}
@@ -147,8 +146,8 @@ class BulletHeckState extends GameState
 		gameOver = true;
 		FlxG.camera.shake(0.02, 0.25, function()
 		{
-			addText("Game Over", 24, 0, 0).screenCenter();
-			addText("Press ACTION to restart", 12, 0, FlxG.height - 32).screenCenter(FlxAxes.X);
+			addText("Game Over", 2, 0, 0, Color.WHITE).screenCenter();
+			addText("Press ACTION to restart", 1, 0, FlxG.height - 32, Color.WHITE).screenCenter(FlxAxes.X);
 		});
 	}
 

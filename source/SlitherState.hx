@@ -50,7 +50,7 @@ class SlitherState extends GameState
 	{
 		super.create();
 
-		FlxG.camera.bgColor = Color.WHITE;
+		FlxG.camera.bgColor = Color.BLACK;
 
 		field = new FlxSprite(0, 0).makeGraphic(TILE_SIZE * TILES_WIDE, TILE_SIZE * TILES_HIGH, Color.GREEN);
 		field.screenCenter();
@@ -231,8 +231,8 @@ class SlitherState extends GameState
 		gameOver = true;
 		FlxG.camera.shake(0.05, 0.25, function()
 		{
-			addText("Game Over", 24, 0, 0).screenCenter();
-			addText("Press ACTION to restart", 12, 0, field.y + field.height - 32).screenCenter(FlxAxes.X);
+			addText("Game Over", 2, 0, 0, Color.WHITE).screenCenter();
+			addText("Press ACTION to restart", 1, 0, field.y + field.height - 32, Color.WHITE).screenCenter(FlxAxes.X);
 		});
 	}
 
@@ -273,7 +273,7 @@ class SlitherState extends GameState
 	{
 		if (sizeText == null)
 		{
-			sizeText = cast(addText("Parts: 0", 12, 2, FlxG.height - 9), MimeoText);
+			sizeText = cast(addText("Parts: 0", 1, 2, FlxG.height - 9, Color.WHITE), MimeoText);
 		}
 
 		var length = parts.length;

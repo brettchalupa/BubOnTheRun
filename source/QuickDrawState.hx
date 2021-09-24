@@ -89,12 +89,12 @@ class QuickDrawState extends GameState
 		scissors.setPosition(rightArrow.x + scissors.width + PADDING, rightArrow.y);
 		add(scissors);
 
-		var drawText = addText('QUICK DRAW!', 12, 0, 12, Color.BLACK).screenCenter(FlxAxes.X);
+		var drawText = addText('QUICK DRAW!', 1, 0, 12, Color.BLACK).screenCenter(FlxAxes.X);
 
-		resultsText = addText('', 12, -1000, -1000);
+		resultsText = addText('', 1, -1000, -1000);
 		resultsText.visible = false;
 
-		scoresText = addText(scoresString(), 12, PADDING);
+		scoresText = addText(scoresString(), 1, PADDING);
 		scoresText.y = FlxG.height - scoresText.height - (PADDING * 8);
 	}
 

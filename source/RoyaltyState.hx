@@ -16,7 +16,7 @@ class RoyaltyState extends GameState
 	{
 		super.create();
 
-		addText("Royalty");
+		addText("Royalty", 1, 0, 0, Color.WHITE);
 	}
 
 	override public function update(elapsed:Float)

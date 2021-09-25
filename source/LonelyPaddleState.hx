@@ -22,7 +22,7 @@ class LonelyPaddleState extends GameState
 	final STAR_DELAY:Float = 10.0;
 	final BUDDY_DELAY:Float = 2.5;
 	final WALL_THICKNESS:Int = 12;
-	final PLAYER_VEL:Int = 140;
+	final PLAYER_VEL:Int = 200;
 	final MAX_PLAYER_VEL:Int = 400;
 	final BALL_VEL:Int = 120;
 	final MAX_BALL_VEL:Int = 180;
@@ -150,6 +150,8 @@ class LonelyPaddleState extends GameState
 		ballDeathSound = FlxG.sound.load("assets/sounds/death.ogg");
 		starSound = FlxG.sound.load("assets/sounds/star.ogg");
 		buddySound = FlxG.sound.load("assets/sounds/jump.ogg");
+
+		FlxG.sound.playMusic("assets/music/lonely-paddle.ogg", 0.5, true);
 	}
 
 	override public function update(elapsed:Float)

@@ -2,6 +2,7 @@ package;
 
 import Input;
 import flixel.FlxG;
+import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup;
 import flixel.system.FlxSound;
@@ -15,23 +16,26 @@ using flixel.util.FlxSpriteUtil;
 class LonelyPaddleState extends GameState
 {
 	static inline final MAX_BALLS:Int = 100;
+	static inline final MAX_BUDDIES:Int = 20;
 	final STAR_DELAY:Float = 10.0;
+	final BUDDY_DELAY:Float = 2.5;
 	final WALL_THICKNESS:Int = 12;
 	final PLAYER_VEL:Int = 140;
 	final MAX_PLAYER_VEL:Int = 400;
 	final BALL_VEL:Int = 120;
 	final MAX_BALL_VEL:Int = 400;
 
-
-	var walls = new FlxTypedGroup<FlxSprite>(3);
+	var walls = new FlxTypedGroup<FlxSprite>(10);
 	var star:FlxSprite;
 	var player:FlxSprite;
 	var balls = new FlxTypedGroup<FlxSprite>(100);
+	var buddies = new FlxTypedGroup<FlxSprite>(MAX_BUDDIES);
 	var collidables = new FlxGroup();
 	var hitSound:FlxSound;
 	var ballDeathSound:FlxSound;
 	var starSound:FlxSound;
 	var timeSinceStar:Float = 0;
+	var timeSinceBuddy:Float = 0;
 	var gameOver:Bool = false;
 
 	override public function create()
@@ -51,6 +55,11 @@ class LonelyPaddleState extends GameState
 		var rightWall = new FlxSprite(FlxG.width - WALL_THICKNESS, -WALL_THICKNESS / 2);
 		rightWall.makeGraphic(WALL_THICKNESS, FlxG.height + WALL_THICKNESS, Color.BLUE);
 		walls.add(rightWall);
+		var centerWall = new FlxSprite();
+		centerWall.makeGraphic(WALL_THICKNESS, WALL_THICKNESS * 4, Color.BLUE);
+		centerWall.screenCenter();
+		centerWall.x += WALL_THICKNESS;
+		walls.add(centerWall);
 		
 		for (wall in walls)
 		{
@@ -78,6 +87,21 @@ class LonelyPaddleState extends GameState
 			balls.add(makeBall());
 		}
 		add(balls);
+
+		for (i in 0...MAX_BUDDIES)
+		{
+			var buddy = new FlxSprite();
+			buddy.loadGraphic("assets/images/lonely-paddle/buddy.png");
+			buddy.kill();
+			buddies.add(buddy);
+		}
+		add(buddies);
+
+		for (i in 0...3)
+		{
+			spawnBuddy();
+		}
+
 		spawnBall();
 
 		collidables.add(player);
@@ -107,6 +131,14 @@ class LonelyPaddleState extends GameState
 				}
 			}
 
+			timeSinceBuddy += elapsed;
+
+			if (timeSinceBuddy > BUDDY_DELAY)
+			{
+				spawnBuddy();
+				timeSinceBuddy = 0;
+			}
+
 			if (Input.pressed(Action.UP))
 			{
 				player.velocity.y = -PLAYER_VEL;
@@ -131,6 +163,7 @@ class LonelyPaddleState extends GameState
 
 			FlxG.collide(balls, collidables, ballHitCollidable);
 			FlxG.overlap(balls, star, ballHitStar);
+			FlxG.overlap(balls, buddies, ballHitBuddy);
 
 			balls.forEachAlive(function(ball) {
 				if (!ball.inWorldBounds())
@@ -187,9 +220,18 @@ class LonelyPaddleState extends GameState
 		var ball = balls.recycle(FlxSprite);
 		ball.revive();
 		ball.screenCenter();
+		ball.x -= WALL_THICKNESS * 2;
 		ball.flicker(1, 0.08, true, true, function(_) {
 			ball.velocity.set(BALL_VEL, BALL_VEL);
 		});
+	}
+
+	function spawnBuddy()
+	{
+		var buddy = buddies.recycle(FlxSprite);
+		placeInField(buddy);
+		buddy.revive();
+		buddy.flicker();
 	}
 
 	function ballHitStar(_, _)
@@ -200,16 +242,30 @@ class LonelyPaddleState extends GameState
 		timeSinceStar = 0;
 	}
 
-	final STAR_POS_MOD = 20;
+	function ballHitBuddy(_, buddy)
+	{
+		starSound.play();
+		buddy.kill();
+	}
 
 	function placeStar()
 	{
-		star.setPosition(
-			FlxG.random.int(STAR_POS_MOD, FlxG.width - WALL_THICKNESS - STAR_POS_MOD),
-			FlxG.random.int(WALL_THICKNESS + STAR_POS_MOD, FlxG.height - WALL_THICKNESS - STAR_POS_MOD)
-		);
+		placeInField(star);
 		star.revive();
 		star.flicker();
+	}
+
+	final FIELD_POS_MOD = 20;
+
+	function placeInField(object:FlxObject)
+	{
+		object.setPosition(
+			FlxG.random.int(FIELD_POS_MOD, FlxG.width - WALL_THICKNESS - FIELD_POS_MOD),
+			FlxG.random.int(WALL_THICKNESS + FIELD_POS_MOD, FlxG.height - WALL_THICKNESS - FIELD_POS_MOD)
+		);
+
+		if (object.overlaps(walls))
+			placeInField(object);
 	}
 
 	function ballHitCollidable(_ball, _collidable)
@@ -237,6 +293,7 @@ class LonelyPaddleState extends GameState
 					onComplete: function(tween:FlxTween) {
 					  if (tween.executions == 2) {
 						  tween.cancel();
+						  _collidable.angle = 0;
 					  }
 				  }
 				}
@@ -256,6 +313,7 @@ class LonelyPaddleState extends GameState
 				onComplete: function(tween:FlxTween) {
 				  if (tween.executions == 2) {
 					  tween.cancel();
+					  object.scale.set(1, 1);
 				  }
 			  }
 			}

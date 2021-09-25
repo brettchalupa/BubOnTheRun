@@ -308,8 +308,9 @@ class LonelyPaddleState extends GameState
 	function placeStar()
 	{
 		placeInField(star);
-		star.revive();
-		star.flicker();
+		star.flicker(1, 0.04, true, true, function(_) {
+			star.revive();
+		});
 	}
 
 	final FIELD_POS_MOD = 20;

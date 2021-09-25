@@ -2,6 +2,45 @@
 
 A compilation of changes for each release.
 
+## r5
+
+Lonely Paddle enters the fray!
+
+Bub on the Run:
+
+- Display "GAME OVER" for title text
+
+Bullet Heck:
+
+- Update description
+
+Hearts:
+
+- sfx on input & larger title
+
+Lonely Paddle:
+
+- Add music & tune gameplay
+- Add emitter on buddy & star death
+- Don't revive star until done flickering
+- add score & high-score tracking
+- Add buddies for collecting
+- Increase player/paddle vel
+- spawn ball on star collection
+- Iterate on paddle sprite & star placement logic
+- Add star
+- Add initial basic game
+
+Global:
+
+- rename selectedGame to focusedGame in MenuState
+- Rework game definition
+- InputManager->Input & switch to static functions
+- remove BaseState#addText in favor of MimeoText instantiation
+- Render game at 4x resolution
+- Update mono bitmap font to support color adjustments
+- Create CHANGELOG
+
 ## r4
 
 Bub on the Run:

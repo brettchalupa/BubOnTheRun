@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://lime.software/project/1.0.2 http://lime.software/xsd/project-1.0.2.xsd">
 
 	<!-- _________________________ Application Settings _________________________ -->
-	<define name="gameVer" value="4" />
+	<define name="gameVer" value="5" />
 
 	<app title="Mimeo" file="Mimeo" main="Main" version="0.${gameVer}.0" company="Brett Chalupa" package="com.brettchalupa.mimeo" />
 

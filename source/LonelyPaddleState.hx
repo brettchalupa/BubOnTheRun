@@ -12,6 +12,7 @@ import flixel.util.FlxAxes;
 import flixel.util.FlxTimer;
 
 using flixel.util.FlxSpriteUtil;
+using StringTools;
 
 class LonelyPaddleState extends GameState
 {
@@ -23,7 +24,8 @@ class LonelyPaddleState extends GameState
 	final PLAYER_VEL:Int = 140;
 	final MAX_PLAYER_VEL:Int = 400;
 	final BALL_VEL:Int = 120;
-	final MAX_BALL_VEL:Int = 400;
+	final MAX_BALL_VEL:Int = 180;
+	final BALL_VEL_MODIFIER:Float = 1.01;
 
 	var walls = new FlxTypedGroup<FlxSprite>(10);
 	var star:FlxSprite;
@@ -37,12 +39,24 @@ class LonelyPaddleState extends GameState
 	var timeSinceStar:Float = 0;
 	var timeSinceBuddy:Float = 0;
 	var gameOver:Bool = false;
+	var score:Int = 0;
+	var highScore:Int = 0;
+	var scoreText:MimeoText;
+	var newHighScore = false;
+
+	final STAR_VALUE = 1000;
+	final BUDDY_VALUE = 200;
 
 	override public function create()
 	{
 		FlxG.cameras.bgColor = Color.GREEN;
 
 		super.create();
+
+		if (save.data.highScore != null)
+		{
+			highScore = Std.int(save.data.highScore);
+		}
 
 		add(new FlxSprite().loadGraphic("assets/images/lonely-paddle/field.png"));
 
@@ -106,6 +120,10 @@ class LonelyPaddleState extends GameState
 
 		collidables.add(player);
 		collidables.add(walls);
+
+		scoreText = new MimeoText("", Color.WHITE, 1, 2, 2);
+		updateScoreText();
+		add(scoreText);
 
 		FlxG.worldBounds.set(0, 0, FlxG.width, FlxG.height);
 
@@ -172,22 +190,51 @@ class LonelyPaddleState extends GameState
 					ball.kill();
 				}
 			});
+			
+			updateScoreText();
 
 			if (balls.getFirstAlive() == null)
 			{
 				gameOver = true;
 
+				if (score > highScore)
+				{
+					newHighScore = true;
+					save.data.highScore = score;
+					save.flush();
+				}
+
 				FlxG.camera.flash(Color.WHITE, 0.75, function() {
+					final spacingModifier = 16;
+
 					var gameOverBG = new FlxSprite();
 					gameOverBG.makeGraphic(FlxG.width, FlxG.height, Color.BLACK);
-					gameOverBG.alpha = 0.8;
+					gameOverBG.alpha = 0.9;
 					gameOverBG.screenCenter();
 					add(gameOverBG);
 					var gameOverText = new MimeoText("Game Over", Color.WHITE, 2).screenCenter();
-					gameOverText.y -= 18;
+					gameOverText.y -= spacingModifier * 2;
 					add(gameOverText);
+
+					var resultsText = new MimeoText("Score: " + formattedScore(score), Color.WHITE, 1).screenCenter();
+					add(resultsText);
+
+					var hsText:String;
+					if (newHighScore)
+					{
+						hsText = "New high-score!";
+					}
+					else
+					{
+						hsText = "High-Score: " + formattedScore(highScore);
+					}
+
+					var highScoreText = new MimeoText(hsText, Color.LIGHT_GREEN, 1).screenCenter();
+					highScoreText.y = spacingModifier * 5;
+					add(highScoreText);
+
 					var restartText = new MimeoText("Press ACTION to restart", Color.WHITE).screenCenter();
-					restartText.y = gameOverText.y + 40;
+					restartText.y = spacingModifier * 7;
 					restartText.flicker(0, 0.4);
 					add(restartText);
 				});
@@ -202,6 +249,15 @@ class LonelyPaddleState extends GameState
 		}
 	}
 
+	function updateScoreText()
+	{
+		scoreText.text = "Score: " + formattedScore(score);
+	}
+
+	function formattedScore(_score):String
+	{
+		 return Std.string(_score).lpad("0", 6);
+	}
 
 	function makeBall()
 	{
@@ -231,11 +287,11 @@ class LonelyPaddleState extends GameState
 		var buddy = buddies.recycle(FlxSprite);
 		placeInField(buddy);
 		buddy.revive();
-		buddy.flicker();
 	}
 
 	function ballHitStar(_, _)
 	{
+		score += STAR_VALUE;
 		starSound.play();
 		star.kill();
 		spawnBall();
@@ -244,6 +300,7 @@ class LonelyPaddleState extends GameState
 
 	function ballHitBuddy(_, buddy)
 	{
+		score += BUDDY_VALUE;
 		starSound.play();
 		buddy.kill();
 	}
@@ -268,9 +325,11 @@ class LonelyPaddleState extends GameState
 			placeInField(object);
 	}
 
-	function ballHitCollidable(_ball, _collidable)
+	function ballHitCollidable(_ball:FlxSprite, _collidable:FlxSprite)
 	{
 		hitSound.play(true);
+		_ball.velocity.x = Std.int(_ball.velocity.x * BALL_VEL_MODIFIER);
+		_ball.velocity.y = Std.int(_ball.velocity.y * BALL_VEL_MODIFIER);
 		scaleTween(_collidable);
 		scaleTween(_ball);
 
@@ -301,7 +360,7 @@ class LonelyPaddleState extends GameState
 		}
 	}
 
-	function scaleTween(object)
+	function scaleTween(object:FlxSprite)
 	{
 		FlxTween.tween(
 			object,

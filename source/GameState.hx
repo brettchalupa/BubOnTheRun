@@ -4,10 +4,12 @@ import Input.Action;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.util.FlxAxes;
+import flixel.util.FlxSave;
 
 class GameState extends FlxState
 {
 	var game:Game;
+	var save:FlxSave;
 
 	public function new(_game:Game)
 	{
@@ -25,6 +27,9 @@ class GameState extends FlxState
 					game = _game;
 			}
 		}
+
+		save = new FlxSave();
+		save.bind(game.slug);
 
 		super.create();
 	}

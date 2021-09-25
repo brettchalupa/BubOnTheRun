@@ -32,7 +32,6 @@ class BubOnTheRunState extends GameState
 	var elapsedTimeText:FlxBitmapText;
 	var startHud:FlxTypedGroup<FlxSprite>;
 	var hud:FlxTypedGroup<FlxSprite>;
-	var save:FlxSave;
 	var highScore:Float = 0;
 	var worldHeight:Int;
 	var justTouchedWall:Bool = false;
@@ -42,7 +41,6 @@ class BubOnTheRunState extends GameState
 	var startText:MimeoText;
 	var premiseText:MimeoText;
 	var highScoreText:MimeoText;
-
 
 	final MAX_VEL_X = 140;
 	final MAX_VEL_Y = 800;
@@ -56,9 +54,6 @@ class BubOnTheRunState extends GameState
 	override public function create()
 	{
 		super.create();
-
-		save = new FlxSave();
-		save.bind("bub-on-the-run");
 
 		if (save.data.highScore != null)
 		{

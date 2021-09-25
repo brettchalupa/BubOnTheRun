@@ -6,6 +6,7 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.util.FlxAxes;
+import flixel.addons.display.FlxBackdrop;
 
 using StringTools;
 
@@ -22,7 +23,11 @@ class BulletHeckState extends GameState
 	override public function create()
 	{
 		super.create();
+
+		FlxG.cameras.bgColor = Color.BLACK;
 		FlxG.worldBounds.set(0, 0, FlxG.width, FlxG.height);
+
+		add(new FlxBackdrop("assets/images/spacevania/bg.png"));
 
 		player = new FlxSprite();
 		player.makeGraphic(8, 8, Color.PINK);

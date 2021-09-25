@@ -10,6 +10,7 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxAxes;
 import flixel.util.FlxTimer;
+import flixel.effects.particles.FlxEmitter;
 
 using flixel.util.FlxSpriteUtil;
 using StringTools;
@@ -32,10 +33,13 @@ class LonelyPaddleState extends GameState
 	var player:FlxSprite;
 	var balls = new FlxTypedGroup<FlxSprite>(100);
 	var buddies = new FlxTypedGroup<FlxSprite>(MAX_BUDDIES);
+	var buddyEmitters = new FlxTypedGroup<FlxEmitter>(MAX_BUDDIES);
+	var starEmitter:FlxEmitter;
 	var collidables = new FlxGroup();
 	var hitSound:FlxSound;
 	var ballDeathSound:FlxSound;
 	var starSound:FlxSound;
+	var buddySound:FlxSound;
 	var timeSinceStar:Float = 0;
 	var timeSinceBuddy:Float = 0;
 	var gameOver:Bool = false;
@@ -87,6 +91,11 @@ class LonelyPaddleState extends GameState
 		star.loadGraphic("assets/images/lonely-paddle/star.png");
 		star.kill();
 		add(star);
+		starEmitter = new FlxEmitter();
+		starEmitter.lifespan.set(0.3, 1.2);
+		starEmitter.makeParticles(2, 2, Color.YELLOW, 60);
+		starEmitter.kill();
+		add(starEmitter);
 
 		player = new FlxSprite(4, 0);
 		player.loadGraphic("assets/images/lonely-paddle/paddle.png");
@@ -111,6 +120,16 @@ class LonelyPaddleState extends GameState
 		}
 		add(buddies);
 
+		for (i in 0...MAX_BUDDIES)
+		{
+			var emitter = new FlxEmitter();
+			emitter.makeParticles(2, 2, Color.PINK, 20);
+			emitter.lifespan.set(0.1, 1);
+			emitter.kill();
+			buddyEmitters.add(emitter);
+		}
+		add(buddyEmitters);
+
 		for (i in 0...3)
 		{
 			spawnBuddy();
@@ -129,7 +148,8 @@ class LonelyPaddleState extends GameState
 
 		hitSound = FlxG.sound.load("assets/sounds/crash.ogg");
 		ballDeathSound = FlxG.sound.load("assets/sounds/death.ogg");
-		starSound = FlxG.sound.load("assets/sounds/jump.ogg");
+		starSound = FlxG.sound.load("assets/sounds/star.ogg");
+		buddySound = FlxG.sound.load("assets/sounds/jump.ogg");
 	}
 
 	override public function update(elapsed:Float)
@@ -293,7 +313,13 @@ class LonelyPaddleState extends GameState
 	{
 		score += STAR_VALUE;
 		starSound.play();
+		starEmitter.revive();
+		starEmitter.setPosition(star.x + star.origin.x, star.y + star.origin.y);
+		starEmitter.start();
 		star.kill();
+		new FlxTimer().start(1.2, function(_) {
+			starEmitter.kill();
+		}, 1);
 		spawnBall();
 		timeSinceStar = 0;
 	}
@@ -301,8 +327,14 @@ class LonelyPaddleState extends GameState
 	function ballHitBuddy(_, buddy)
 	{
 		score += BUDDY_VALUE;
-		starSound.play();
+		buddySound.play();
+		var emitter = buddyEmitters.recycle(FlxEmitter);
+		emitter.setPosition(buddy.x + buddy.origin.x, buddy.y + buddy.origin.y);
 		buddy.kill();
+		emitter.start();
+		new FlxTimer().start(1, function(_) {
+			emitter.kill();
+		}, 1);
 	}
 
 	function placeStar()

@@ -208,7 +208,7 @@ class LonelyPaddleState extends GameState
 			balls.forEachAlive(function(ball) {
 				if (!ball.inWorldBounds())
 				{
-					ballDeathSound.play();
+					ballDeathSound.play(true);
 					ball.kill();
 				}
 			});
@@ -266,7 +266,7 @@ class LonelyPaddleState extends GameState
 		{
 			if (Input.justPressed(Action.CONFIRM)) 
 			{
-				starSound.play();
+				starSound.play(true);
 				FlxG.resetState();
 			}
 		}
@@ -315,7 +315,7 @@ class LonelyPaddleState extends GameState
 	function ballHitStar(_, _)
 	{
 		score += STAR_VALUE;
-		starSound.play();
+		starSound.play(true);
 		starEmitter.revive();
 		starEmitter.setPosition(star.x + star.origin.x, star.y + star.origin.y);
 		starEmitter.start();
@@ -330,7 +330,7 @@ class LonelyPaddleState extends GameState
 	function ballHitBuddy(_, buddy)
 	{
 		score += BUDDY_VALUE;
-		buddySound.play();
+		buddySound.play(true);
 		var emitter = buddyEmitters.recycle(FlxEmitter);
 		emitter.setPosition(buddy.x + buddy.origin.x, buddy.y + buddy.origin.y);
 		buddy.kill();

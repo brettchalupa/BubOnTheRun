@@ -266,6 +266,7 @@ class LonelyPaddleState extends GameState
 		{
 			if (Input.justPressed(Action.CONFIRM)) 
 			{
+				starSound.play();
 				FlxG.resetState();
 			}
 		}

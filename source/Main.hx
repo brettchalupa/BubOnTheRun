@@ -24,5 +24,10 @@ class Main extends Sprite
 		#end
 
 		FlxG.sound.volume = 0.5;
+
+		if (FlxG.mouse != null)
+		{
+			FlxG.mouse.visible = false;
+		}
 	}
 }

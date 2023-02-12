@@ -2,6 +2,8 @@
 
 Simple infinite runner
 
+[Play it!](https://brettchalupa.itch.io/bub-on-the-run)
+
 The game is built using [HaxeFlixel](https://haxeflixel.com).
 
 ## Developing
@@ -34,3 +36,9 @@ A note about test targets:
 ### Building
 
 Build the game for playing with: `lime build TARGET -final -clean`
+
+## License
+
+CC0 & Unlicense
+
+_Bub on the Run_ is dedicated to the public domain.

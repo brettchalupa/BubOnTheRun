@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://lime.software/project/1.0.2 http://lime.software/xsd/project-1.0.2.xsd">
 
 	<!-- _________________________ Application Settings _________________________ -->
-	<define name="gameVer" value="1.1" />
+	<define name="gameVer" value="1.2" />
 
 	<app title="Bub on the Run" file="Bub on the Run" main="Main" version="${gameVer}" company="Brett Chalupa" package="com.brettchalupa.bubontherun" />
 

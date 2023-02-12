@@ -1,6 +1,6 @@
-# Mimeo
+# Bub on the Run
 
-Collection of retro game clones
+Simple infinite runner
 
 The game is built using [HaxeFlixel](https://haxeflixel.com).
 

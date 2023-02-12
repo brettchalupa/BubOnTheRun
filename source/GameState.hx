@@ -36,11 +36,6 @@ class GameState extends FlxState
 
 	override public function update(elapsed:Float)
 	{
-		if (Input.justReleased(Action.CANCEL))
-		{
-			FlxG.switchState(new MenuState(game.slug));
-		}
-
 		super.update(elapsed);
 	}
 }

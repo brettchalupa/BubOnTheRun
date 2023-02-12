@@ -99,7 +99,7 @@ class BubOnTheRunState extends GameState
 		player = new FlxSprite();
 		player.loadGraphic("assets/images/bub-on-the-run/player.png", true, 16, 16);
 		player.screenCenter();
-		player.animation.add("walk", [2, 3], 7, true);
+		player.animation.add("walk", [2, 3], 6, true);
 		player.animation.add("jump", [4]);
 		player.animation.add("wall", [5]);
 		player.animation.add("dead", [6]);
@@ -136,21 +136,25 @@ class BubOnTheRunState extends GameState
 		startBg.makeGraphic(FlxG.width, Std.int(FlxG.height), Color.WHITE);
 		startHud.add(startBg);
 		titleText = new MimeoText("BUB ON THE RUN");
+		titleText.alignment = FlxTextAlign.CENTER;
 		titleText.screenCenter();
 		titleText.y = 16;
 		startHud.add(titleText);
 		premiseText = new MimeoText("outrun ur inner-demons");
 		premiseText.screenCenter();
+		premiseText.alignment = FlxTextAlign.CENTER;
 		premiseText.y = titleText.y + titleText.height + 4;
 		startHud.add(premiseText);
 		startText = new MimeoText("tap to start");
+		startText.alignment = FlxTextAlign.CENTER;
 		startText.screenCenter();
 		startText.y = player.y + player.height + 24;
 		startText.flicker(0, 0.5);
 		startHud.add(startText);
 		highScoreText = new MimeoText('high-score: $highScore' + 's');
 		highScoreText.screenCenter();
-		highScoreText.y = startText.y + startText.height + 12;
+		highScoreText.alignment = FlxTextAlign.CENTER;
+		highScoreText.y = startText.y + startText.height + 6;
 		startHud.add(highScoreText);
 		for (item in startHud)
 		{
@@ -162,7 +166,12 @@ class BubOnTheRunState extends GameState
 
 		add(player);
 
-		FlxG.sound.playMusic("assets/music/botr.ogg", 0.5, true);
+		FlxG.sound.cacheAll();
+
+		if (FlxG.sound.music == null)
+		{
+			FlxG.sound.playMusic("assets/music/fantasy-world.ogg", 0.5, true);
+		}
 
 		#if debug
 		FlxG.debugger.drawDebug;
@@ -267,7 +276,7 @@ class BubOnTheRunState extends GameState
 		player.acceleration.set(0, 0);
 		FlxG.camera.setPosition(0, 0);
 		FlxG.camera.color = FlxColor.TRANSPARENT;
-		player.setPosition(FlxG.camera.width / 2 - player.width / 2 + 16, FlxG.camera.height / 2 - player.height / 2 + 8);
+		player.setPosition(FlxG.camera.width / 2 - player.width / 2 + 120, FlxG.camera.height / 2 - player.height / 2 + 8);
 
 		var newHighScore = false;
 		var newScore = Std.int(totalElapsedTime);
@@ -280,6 +289,7 @@ class BubOnTheRunState extends GameState
 		}
 
 		titleText.text = "GAME OVER";
+		titleText.alignment = FlxTextAlign.CENTER;
 		titleText.screenCenter(FlxAxes.X);
 
 		if (newHighScore)
@@ -297,6 +307,7 @@ class BubOnTheRunState extends GameState
 			highScoreText.text = 'new high-score: $newScore' + "s\n" + 'previous high-score: $highScore' + 's';
 		else
 			highScoreText.text = 'ur score: $newScore' + "s\n" + 'high-score: $highScore' + "s";
+		highScoreText.screenCenter(FlxAxes.X);
 	}
 
 	function updateTotalElapsedTime(elapsed:Float)

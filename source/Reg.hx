@@ -10,75 +10,12 @@ class Reg
 	{
 		games = [
 			new Game(
-				"Gblox",
-				"gblox",
-				"Block-based puzzler",
-				false,
-				GbloxState
-			),
-			new Game(
-				"Slither",
-				"slither",
-				"Snake rip-off!",
-				true,
-				SlitherState
-			),
-			new Game(
-				"Dogfight",
-				"dogfight",
-				"Shoot down enemy planes",
-				false,
-				DogfightState
-			),
-			new Game(
-				"Quick Draw",
-				"quick-draw",
-				"Rock, paper, scissors",
-				true,
-				QuickDrawState
-			),
-			new Game(
-				"Royalty",
-				"royalty",
-				"Solitaire",
-				false,
-				RoyaltyState
-			),
-			new Game(
-				"Cutscene Prototype",
-				"hearts",
-				"Visual novel-style text display",
-				true,
-				HeartsState
-			),
-			new Game(
 				"Bub on the Run",
 				"bub-on-the-run",
 				"Infinite runner",
 				true,
 				BubOnTheRunState
 			),
-			new Game(
-				"Spacevania",
-				"spacevania",
-				"Space action shooter",
-				false,
-				SpacevaniaState
-			),
-			new Game(
-				"Bullet Heck",
-				"bullet-heck",
-				"A cute 'em up",
-				true,
-				BulletHeckState
-			),
-			new Game(
-				"Lonely Paddle",
-				"lonely-paddle",
-				"For those without a table tennis partner",
-				true,
-				LonelyPaddleState
-			)
 		];
 	}
 }

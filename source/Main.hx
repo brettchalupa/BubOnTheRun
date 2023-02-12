@@ -17,17 +17,12 @@ class Main extends Sprite
 
 		Reg.loadGames();
 
-		addChild(new FlxGame(240, 135, MenuState, 3, 60, 60, true, false));
+		addChild(new FlxGame(240, 135, BubOnTheRunState, 3, 60, 60, true, false));
 
 		#if debug
 		addChild(new FPS(4, 512, Color.WHITE));
 		#end
 
 		FlxG.sound.volume = 0.5;
-
-		if (FlxG.mouse != null)
-		{
-			FlxG.mouse.visible = false;
-		}
 	}
 }

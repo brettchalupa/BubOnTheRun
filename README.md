@@ -20,9 +20,10 @@ haxelib run flixel-tools setup
 
 ### Testing
 
-Test the game quickly on the Neko VM with `lime test neko -debug`
+Test the game quickly on the Neko VM with `lime test html5 -debug`
 
-Update assets with `lime update neko`
+- Update build with `lime build html5 -debug`
+- Update assets with `lime update html5 -debug`
 
 A note about test targets:
 
